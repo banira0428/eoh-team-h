@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.example.team.w.R
 import com.example.team.w.adapters.ProjectAdapter
@@ -38,6 +39,27 @@ class MainFragment : Fragment() {
             Project(name = "プロジェクト1"),
             Project(name = "プロジェクト2")
         )
+        adapter.setOnClickListener(object: ProjectAdapter.OnClickListener{
+
+            override fun onClickPlayProject() {
+                Toast.makeText(requireContext(),"play",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onClickEditProject() {
+                Toast.makeText(requireContext(),"edit",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onClickDeleteProject() {
+                Toast.makeText(requireContext(),"delete",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onClickAddProject() {
+                adapter.projects.add(Project(name = "追加されたプロジェクト"))
+                adapter.notifyDataSetChanged()
+            }
+
+
+        })
 
         binding.listProject.layoutManager = LinearLayoutManager(requireContext())
         binding.listProject.setHasFixedSize(true)
