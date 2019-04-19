@@ -10,4 +10,17 @@
             tools:layout="@layout/main_fragment">
     </fragment>
 
+    <fragment
+            android:id="@+id/editFragment"
+            android:name="com.example.team.w.fragments.EditFragment"
+            tools:layout="@layout/edit_fragment">
+    </fragment>
+
+    <fragment
+            android:id="@+id/playFragment"
+            android:name="com.example.team.w.fragments.PlayFragment"
+            tools:layout="@layout/play_fragment">
+    </fragment>
+
+
 </navigation>
