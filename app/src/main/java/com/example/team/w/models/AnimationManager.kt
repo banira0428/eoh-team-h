@@ -8,6 +8,31 @@ import com.example.team.w.adapters.MyAnimatorListenerAdapter
 
 class AnimationManager {
 
+    var arrowPosition = 0f
+
+    var previousPosition = 0
+
+    var screenwidth = 0
+
+    fun arrowAnimation(view: View,position: Int){
+        // ObjectAnimatorにセットする
+        val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            PropertyValuesHolder.ofFloat(
+                "translationX",
+                arrowPosition,
+                arrowPosition + screenwidth/30 * (position - previousPosition)
+            )
+        )
+
+        arrowPosition += screenwidth/30 * (position - previousPosition)
+        previousPosition = position
+
+        objectAnimator.duration = ANIMATION_LENGTH_LONG
+
+        objectAnimator.start()
+    }
+
     fun disappearAnimation(view: View, endListener: () -> Unit) {
         // ObjectAnimatorにセットする
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(

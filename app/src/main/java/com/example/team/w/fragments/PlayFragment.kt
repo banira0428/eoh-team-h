@@ -2,6 +2,7 @@ package com.example.team.w.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
+import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -30,7 +31,7 @@ class PlayFragment : Fragment() {
     private var eventPosition = 0
 
     private var events: Array<Event> = arrayOf(
-        Event(name = "イベント1"), Event(name = "イベント2"), Event(name = "イベント3"), Event(name = "イベント4")
+        Event(name = "イベント1",year = 0), Event(name = "イベント2",year = 8), Event(name = "イベント3",year = 10), Event(name = "イベント4",year = 15)
     )
 
     override fun onCreateView(
@@ -44,6 +45,10 @@ class PlayFragment : Fragment() {
 
         animationManager = AnimationManager()
 
+        val size = Point()
+        activity?.windowManager?.defaultDisplay?.getSize(size)
+        animationManager.screenwidth = size.x
+
         appear()
 
         return binding.root
@@ -54,6 +59,7 @@ class PlayFragment : Fragment() {
         if (eventPosition >= events.size) return
 
         binding.textEvent.text = events[eventPosition].name
+        animationManager.arrowAnimation(binding.textArrow,events[eventPosition].year)
         eventPosition++
 
         animationManager.appearAnimation(binding.cardEvent, endListener = {
