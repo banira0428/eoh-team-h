@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 
 import com.example.team.w.R
 import com.example.team.w.adapters.ProjectAdapter
@@ -42,11 +43,11 @@ class MainFragment : Fragment() {
         adapter.setOnClickListener(object: ProjectAdapter.OnClickListener{
 
             override fun onClickPlayProject() {
-                Toast.makeText(requireContext(),"play",Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_main_to_play)
             }
 
             override fun onClickEditProject() {
-                Toast.makeText(requireContext(),"edit",Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_main_to_edit)
             }
 
             override fun onClickDeleteProject() {

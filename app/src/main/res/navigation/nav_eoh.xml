@@ -8,6 +8,15 @@
             android:id="@+id/mainFragment"
             android:name="com.example.team.w.fragments.MainFragment"
             tools:layout="@layout/main_fragment">
+
+        <action
+                android:id="@+id/action_main_to_edit"
+                app:destination="@id/editFragment"/>
+
+        <action
+                android:id="@+id/action_main_to_play"
+                app:destination="@id/playFragment"/>
+
     </fragment>
 
     <fragment
