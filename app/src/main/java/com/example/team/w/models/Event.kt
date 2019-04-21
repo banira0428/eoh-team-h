@@ -1,3 +1,5 @@
 package com.example.team.w.models
 
-data class Event(val id:String = "",val name: String = "",val description: String = "",val year: Int = 0,val imagePath: String = "")
+import android.net.Uri
+
+data class Event(val id:String = "",val name: String = "",val desc: String = "",val imageURL: String = "",val wareki: Int = 0,var imageURI: Uri = Uri.EMPTY)
