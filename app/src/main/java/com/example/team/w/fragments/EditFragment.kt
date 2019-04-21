@@ -81,7 +81,7 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonSaveEvents.setOnClickListener {
-            viewModel.saveEvents(adapter.documents)
+            viewModel.saveEvents(adapter.documents,adapter.needDeleteDocuments)
         }
 
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
@@ -96,6 +96,7 @@ class EditFragment : Fragment() {
                 }
 
                 adapter.documents = documents
+                adapter.needDeleteDocuments = ArrayList()
             }
         })
 

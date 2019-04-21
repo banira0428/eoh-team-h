@@ -13,8 +13,6 @@ import android.widget.ImageButton
 import android.widget.NumberPicker
 import com.example.team.w.R
 import com.example.team.w.models.Document
-import com.example.team.w.models.Event
-import com.google.firebase.firestore.DocumentSnapshot
 
 class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
@@ -23,6 +21,8 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
             field = value
             notifyDataSetChanged()
         }
+
+    var needDeleteDocuments: ArrayList<Document> = ArrayList()
 
     var selectedItemPosition: Int = 0
 
@@ -68,6 +68,12 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 //            }
             holder.pickerYear.minValue = 1
             holder.pickerYear.maxValue = 31
+
+            holder.buttonDelete.setOnClickListener {
+                needDeleteDocuments.add(documents[holder.adapterPosition])
+                documents.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+            }
         }
 
     }
@@ -100,6 +106,7 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
         val imageEvent: ImageButton = v.findViewById(R.id.image_event)
         val buttonYear: Button = v.findViewById(R.id.button_year)
         val pickerYear: NumberPicker = v.findViewById(R.id.picker_year)
+        val buttonDelete: Button = v.findViewById(R.id.button_delete)
     }
 
     companion object {

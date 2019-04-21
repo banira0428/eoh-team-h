@@ -11,7 +11,9 @@
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_event"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/button_play_events"/>
 
         <Button
                 android:id="@+id/button_add_event"

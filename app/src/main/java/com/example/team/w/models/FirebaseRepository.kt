@@ -10,24 +10,36 @@ object FirebaseRepository {
 
     private var events: MutableLiveData<List<DocumentSnapshot>>? = null
 
-    fun saveEvents(events: ArrayList<Document>) {
+    fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>) {
 
         val db = FirebaseFirestore.getInstance()
         val batch: WriteBatch = db.batch()
 
         events.forEach {
 
-            if(it.id.isEmpty()){
+            if(it.id.isEmpty()){ //新規追加
                 val ref = db.collection("events")
                     .document()
                 batch.set(ref,it.event)
-            }else{
+            }else{ //更新
                 val ref = db.collection("events")
                     .document(it.id)
                 batch.set(ref,it.event)
             }
         }
-        batch.commit()
+
+        deleteEvents.forEach {
+
+            if(it.id.isNotEmpty()){ //削除
+                val ref = db.collection("events")
+                    .document(it.id)
+                batch.delete(ref)
+            }
+        }
+
+        batch.commit().addOnCompleteListener {
+            loadEvents()
+        }
     }
 
     fun getEvents(): LiveData<List<DocumentSnapshot>>{
