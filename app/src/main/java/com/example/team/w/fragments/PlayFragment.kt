@@ -31,7 +31,7 @@ class PlayFragment : Fragment() {
     private var eventPosition = 0
 
     private var events: Array<Event> = arrayOf(
-        Event(name = "イベント1",year = 0), Event(name = "イベント2",year = 8), Event(name = "イベント3",year = 10), Event(name = "イベント4",year = 15)
+        Event(name = "イベント1",wareki = 0), Event(name = "イベント2",wareki = 8), Event(name = "イベント3",wareki = 10), Event(name = "イベント4",wareki = 15)
     )
 
     override fun onCreateView(
@@ -59,7 +59,7 @@ class PlayFragment : Fragment() {
         if (eventPosition >= events.size) return
 
         binding.textEvent.text = events[eventPosition].name
-        animationManager.arrowAnimation(binding.textArrow,events[eventPosition].year)
+        animationManager.arrowAnimation(binding.textArrow,events[eventPosition].wareki)
         eventPosition++
 
         animationManager.appearAnimation(binding.cardEvent, endListener = {

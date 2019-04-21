@@ -2,6 +2,7 @@ package com.example.team.w.fragments
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -15,9 +16,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.team.w.R
 import com.example.team.w.adapters.EventAdapter
 import com.example.team.w.databinding.EditFragmentBinding
+import com.example.team.w.models.Document
 import com.example.team.w.models.Event
 import java.io.IOException
 
@@ -39,10 +42,11 @@ class EditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        viewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
+
         val binding = DataBindingUtil.inflate<EditFragmentBinding>(inflater, R.layout.edit_fragment, container, false)
 
         adapter = EventAdapter()
-        adapter.events = arrayListOf(Event(name = "イベント1"), Event(name = "イベント2"))
 
         adapter.setOnClickListener(object : EventAdapter.OnClickListener {
             override fun onClickSetDate(position: Int) {
@@ -67,21 +71,35 @@ class EditFragment : Fragment() {
         binding.listEvent.adapter = adapter
 
         binding.buttonAddEvent.setOnClickListener {
-            adapter.events.add(0, Event())
+            adapter.documents.add(0, Document())
             adapter.notifyItemInserted(0)
             binding.listEvent.scrollToPosition(0)
         }
 
-        binding.buttonSaveProject.setOnClickListener {
-
+        binding.buttonPlayEvents.setOnClickListener {
+            findNavController().navigate(R.id.action_edit_to_play)
         }
 
+        binding.buttonSaveEvents.setOnClickListener {
+            viewModel.saveEvents(adapter.documents)
+        }
+
+        viewModel.getEvents().observe(viewLifecycleOwner, Observer {
+            it?.let{
+                val documents = ArrayList<Document>()
+
+                it.forEach { document ->
+                    val event = document.toObject(Event::class.java)
+                    event?.let {
+                        documents.add(Document(id = document.id,event = event))
+                    }
+                }
+
+                adapter.documents = documents
+            }
+        })
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, result: Intent?) {

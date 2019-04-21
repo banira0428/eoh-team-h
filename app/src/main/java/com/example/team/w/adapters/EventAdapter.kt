@@ -2,6 +2,8 @@ package com.example.team.w.adapters
 
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +12,13 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.NumberPicker
 import com.example.team.w.R
+import com.example.team.w.models.Document
 import com.example.team.w.models.Event
+import com.google.firebase.firestore.DocumentSnapshot
 
 class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
-    var events: ArrayList<Event> = ArrayList()
+    var documents: ArrayList<Document> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -35,23 +39,33 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
 
     override fun getItemCount(): Int {
-        return events.size
+        return documents.size
     }
 
     override fun onBindViewHolder(holder: EventAdapter.ViewHolder, position: Int) {
 
         if (holder is EventViewHolder) {
-            holder.editEventName.setText(events[position].name)
+            holder.editEventName.setText(documents[holder.adapterPosition].event.name)
+            holder.editEventName.addTextChangedListener(object: TextWatcher{
+                override fun afterTextChanged(s: Editable?) {
+                    documents[holder.adapterPosition].event.name = s.toString()
+                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+            })
             holder.imageEvent.setOnClickListener {
-                selectedItemPosition = position
-                listener?.onClickSetImage(position)
+                selectedItemPosition = holder.adapterPosition
+                listener?.onClickSetImage(holder.adapterPosition)
             }
             holder.buttonYear.setOnClickListener {
-                listener?.onClickSetDate(position)
+                listener?.onClickSetDate(holder.adapterPosition)
             }
-            if(events[position].imageURI != Uri.EMPTY){
-                holder.imageEvent.setImageURI(events[position].imageURI)
-            }
+//            if(events[position].imageURI != Uri.EMPTY){
+//                holder.imageEvent.setImageURI(events[position].imageURI)
+//            }
             holder.pickerYear.minValue = 1
             holder.pickerYear.maxValue = 31
         }
@@ -70,12 +84,12 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position < events.size) return VIEW_TYPE_EVENT
+        if (position < documents.size) return VIEW_TYPE_EVENT
         return VIEW_TYPE_ADD
     }
 
     fun setImageResource(uri: Uri){
-        events[selectedItemPosition].imageURI = uri
+        //events[selectedItemPosition].imageURI = uri
         notifyDataSetChanged()
     }
 

@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:startDestination="@id/mainFragment"
+            app:startDestination="@id/editFragment"
             android:id="@+id/nav_eoh">
-
-    <fragment
-            android:id="@+id/mainFragment"
-            android:name="com.example.team.w.fragments.MainFragment"
-            tools:layout="@layout/main_fragment">
-
-        <action
-                android:id="@+id/action_main_to_edit"
-                app:destination="@id/editFragment"/>
-
-        <action
-                android:id="@+id/action_main_to_play"
-                app:destination="@id/playFragment"/>
-
-    </fragment>
 
     <fragment
             android:id="@+id/editFragment"
             android:name="com.example.team.w.fragments.EditFragment"
             tools:layout="@layout/edit_fragment">
+
+        <action
+                android:id="@+id/action_edit_to_play"
+                app:destination="@id/playFragment"/>
+
     </fragment>
 
     <fragment
