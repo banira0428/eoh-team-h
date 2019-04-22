@@ -12,9 +12,7 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.team.w.R
@@ -41,6 +39,8 @@ class EditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
 
@@ -85,12 +85,12 @@ class EditFragment : Fragment() {
         }
 
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.also{
                 val documents = ArrayList<Document>()
 
                 it.forEach { document ->
                     val event = document.toObject(Event::class.java)
-                    event?.let {
+                    event?.also {
                         documents.add(Document(id = document.id,event = event))
                     }
                 }
@@ -118,9 +118,24 @@ class EditFragment : Fragment() {
                     Log.e("error","can't set image")
                 }
 
-
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_eop,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        when(item?.itemId){
+            R.id.action_credit ->{
+                findNavController().navigate(R.id.action_edit_to_credit)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }

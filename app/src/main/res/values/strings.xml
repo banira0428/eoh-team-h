@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">EohApplication</string>
     <string name="save_event">保存する</string>
+    <string name="hint_event_name">イベント名</string>
+    <string name="hint_event_desc">イベント詳細</string>
+    <string name="credit">クレジット</string>
 </resources>

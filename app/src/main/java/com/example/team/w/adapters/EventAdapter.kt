@@ -106,7 +106,7 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
         val imageEvent: ImageButton = v.findViewById(R.id.image_event)
         val buttonYear: Button = v.findViewById(R.id.button_year)
         val pickerYear: NumberPicker = v.findViewById(R.id.picker_year)
-        val buttonDelete: Button = v.findViewById(R.id.button_delete)
+        val buttonDelete: ImageButton = v.findViewById(R.id.button_delete)
     }
 
     companion object {

@@ -13,6 +13,16 @@
                 android:id="@+id/action_edit_to_play"
                 app:destination="@id/playFragment"/>
 
+        <action
+                android:id="@+id/action_edit_to_credit"
+                app:destination="@id/creditFragment"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/creditFragment"
+            android:name="com.example.team.w.fragments.CreditFragment"
+            tools:layout="@layout/credit_fragment">
     </fragment>
 
     <fragment
