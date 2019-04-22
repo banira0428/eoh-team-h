@@ -26,7 +26,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
     var needDeleteDocuments: ArrayList<Document> = ArrayList()
 
-    var selectedItemPosition: Int = 0
+    var selectedItemPosition: Int = -1
 
     private val yearAdapter = ArrayAdapter(
         context,
@@ -166,7 +166,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         val imageEvent: ImageButton = v.findViewById(R.id.image_event)
         val spinnerYear: Spinner = v.findViewById(R.id.spinner_year)
         val buttonDelete: ImageButton = v.findViewById(R.id.button_delete)
-        val buttonClose: Button = v.findViewById(R.id.button_close)
+        val buttonClose: ImageButton = v.findViewById(R.id.button_close)
 
         val layoutNormal: ConstraintLayout = v.findViewById(R.id.layout_card_normal)
         val layoutEdit: ConstraintLayout = v.findViewById(R.id.layout_card_edit)

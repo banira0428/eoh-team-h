@@ -54,6 +54,7 @@ object FirebaseRepository {
         val db = FirebaseFirestore.getInstance()
         db.collection("events")
             //.whereEqualTo("userId", userId)
+            .orderBy("wareki")
             .get()
             .addOnCompleteListener {
                 events?.postValue(it.result?.documents)
