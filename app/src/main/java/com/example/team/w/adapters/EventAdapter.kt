@@ -1,5 +1,6 @@
 package com.example.team.w.adapters
 
+import android.content.Context
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -7,14 +8,17 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.NumberPicker
+import android.widget.Spinner
 import com.example.team.w.R
 import com.example.team.w.models.Document
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 
-class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+
+class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     var documents: ArrayList<Document> = ArrayList()
         set(value) {
@@ -25,6 +29,11 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
     var needDeleteDocuments: ArrayList<Document> = ArrayList()
 
     var selectedItemPosition: Int = 0
+
+    private val yearAdapter = ArrayAdapter(
+        context,
+        android.R.layout.simple_spinner_item, Array(31) { i -> "平成${if (i == 0) "元" else i + 1}年" }
+    )
 
     private var listener: EventAdapter.OnClickListener? = null
 
@@ -46,12 +55,41 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
         if (holder is EventViewHolder) {
             holder.editEventName.setText(documents[holder.adapterPosition].event.name)
-            holder.editEventName.addTextChangedListener(object: TextWatcher{
+            holder.editEventName.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     documents[holder.adapterPosition].event.name = s.toString()
                 }
+
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 }
+                
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+            })
+
+            yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            holder.spinnerYear.adapter = yearAdapter
+            holder.spinnerYear.setSelection(documents[holder.adapterPosition].event.wareki)
+            holder.spinnerYear.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    documents[holder.adapterPosition].event.wareki = position
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                }
+            }
+
+            holder.editEventDesc.setText(documents[holder.adapterPosition].event.desc)
+            holder.editEventDesc.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    documents[holder.adapterPosition].event.desc = s.toString()
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 }
 
@@ -60,14 +98,10 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
                 selectedItemPosition = holder.adapterPosition
                 listener?.onClickSetImage(holder.adapterPosition)
             }
-            holder.buttonYear.setOnClickListener {
-                listener?.onClickSetDate(holder.adapterPosition)
-            }
+
 //            if(events[position].imageURI != Uri.EMPTY){
 //                holder.imageEvent.setImageURI(events[position].imageURI)
 //            }
-            holder.pickerYear.minValue = 1
-            holder.pickerYear.maxValue = 31
 
             holder.buttonDelete.setOnClickListener {
                 needDeleteDocuments.add(documents[holder.adapterPosition])
@@ -94,7 +128,7 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
         return VIEW_TYPE_ADD
     }
 
-    fun setImageResource(uri: Uri){
+    fun setImageResource(uri: Uri) {
         //events[selectedItemPosition].imageURI = uri
         notifyDataSetChanged()
     }
@@ -103,9 +137,9 @@ class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     class EventViewHolder(v: View) : ViewHolder(v) {
         val editEventName: EditText = v.findViewById(R.id.edit_event_name)
+        val editEventDesc: EditText = v.findViewById(R.id.edit_event_desc)
         val imageEvent: ImageButton = v.findViewById(R.id.image_event)
-        val buttonYear: Button = v.findViewById(R.id.button_year)
-        val pickerYear: NumberPicker = v.findViewById(R.id.picker_year)
+        val spinnerYear: Spinner = v.findViewById(R.id.spinner_year)
         val buttonDelete: ImageButton = v.findViewById(R.id.button_delete)
     }
 

@@ -15,8 +15,7 @@ class YearAdapter() : RecyclerView.Adapter<YearAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: YearAdapter.ViewHolder, position: Int) {
 
-        holder.textYear.text = "$position"
-
+        holder.textYear.text = if(position < 10) " $position" else "$position"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YearAdapter.ViewHolder {

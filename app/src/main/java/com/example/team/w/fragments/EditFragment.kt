@@ -46,7 +46,7 @@ class EditFragment : Fragment() {
 
         val binding = DataBindingUtil.inflate<EditFragmentBinding>(inflater, R.layout.edit_fragment, container, false)
 
-        adapter = EventAdapter()
+        adapter = EventAdapter(requireContext())
 
         adapter.setOnClickListener(object : EventAdapter.OnClickListener {
             override fun onClickSetDate(position: Int) {
