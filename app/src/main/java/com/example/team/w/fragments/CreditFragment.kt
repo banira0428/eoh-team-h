@@ -27,7 +27,6 @@ class CreditFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CreditViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
