@@ -12,10 +12,80 @@
             app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/layout_card_normal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+            <ImageButton
+                    android:id="@+id/image_event_preview"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginStart="@dimen/element_spacing_normal"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@null"/>
+
+            <TextView
+                    android:id="@+id/text_event_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@id/image_event_preview"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:textSize="24sp"/>
+
+            <TextView
+                    android:id="@+id/text_event_year"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@id/image_event_preview"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/image_event_preview"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:textSize="14sp"/>
+
+
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/layout_card_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+            <ImageButton
+                    android:id="@+id/image_event"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginStart="@dimen/element_spacing_normal"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@null"/>
+
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/layout_edit_event_name"
+                    style="@style/MyTextInputLayoutStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@id/image_event"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/edit_event_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:hint="@string/hint_event_name"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <ImageButton
                     android:id="@+id/button_delete"
@@ -27,33 +97,6 @@
                     android:src="@drawable/baseline_cancel_black_24"
                     android:background="@null"
                     android:contentDescription="@null"/>
-
-            <ImageButton
-                    android:id="@+id/image_event"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginStart="@dimen/element_spacing_normal"
-                    android:scaleType="fitCenter"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/button_delete"
-                    android:contentDescription="@null"/>
-
-            <android.support.design.widget.TextInputLayout
-                    android:id="@+id/layout_edit_event_name"
-                    style="@style/MyTextInputLayoutStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@id/image_event"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/button_delete">
-
-                <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/edit_event_name"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:hint="@string/hint_event_name"/>
-
-            </android.support.design.widget.TextInputLayout>
 
             <Spinner
                     android:id="@+id/spinner_year"
@@ -69,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/element_spacing_normal"
                     app:layout_constraintTop_toBottomOf="@id/spinner_year"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintBottom_toTopOf="@id/button_close">
 
                 <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_event_desc"
@@ -81,12 +124,11 @@
 
 
             <Button
-                    android:id="@+id/button_year"
+                    android:id="@+id/button_close"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="日時"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toRightOf="@id/image_event"
+                    android:text="閉じる"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

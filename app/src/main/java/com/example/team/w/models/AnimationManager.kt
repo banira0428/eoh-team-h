@@ -6,7 +6,22 @@ import android.animation.PropertyValuesHolder
 import android.view.View
 import com.example.team.w.adapters.MyAnimatorListenerAdapter
 
-class AnimationManager {
+object AnimationManager {
+
+    private const val ANIMATION_LENGTH_SHORT = 300L
+    private const val ANIMATION_LENGTH_MIDDLE = 500L
+    private const val ANIMATION_LENGTH_LONG = 1000L
+
+    private val ANIMATION_DISAPPEAR = PropertyValuesHolder.ofFloat(
+        "alpha",
+        1f,
+        0f
+    )
+    private val ANIMATION_APPEAR = PropertyValuesHolder.ofFloat(
+        "alpha",
+        0f,
+        1f
+    )
 
     var arrowPosition = 0f
 
@@ -14,18 +29,20 @@ class AnimationManager {
 
     var screenwidth = 0
 
-    fun arrowAnimation(view: View,position: Int){
+    var animationJobs = 0
+
+    fun arrowAnimation(view: View, position: Int) {
         // ObjectAnimatorにセットする
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
             view,
             PropertyValuesHolder.ofFloat(
                 "translationX",
                 arrowPosition,
-                arrowPosition + screenwidth/30 * (position - previousPosition)
+                arrowPosition + screenwidth / 30 * (position - previousPosition)
             )
         )
 
-        arrowPosition += screenwidth/30 * (position - previousPosition)
+        arrowPosition += screenwidth / 30 * (position - previousPosition)
         previousPosition = position
 
         objectAnimator.duration = ANIMATION_LENGTH_LONG
@@ -94,21 +111,46 @@ class AnimationManager {
         objectAnimator.start()
     }
 
-    companion object {
-        private const val ANIMATION_LENGTH_SHORT = 300L
-        private const val ANIMATION_LENGTH_LONG = 1000L
+    fun appearEditEventAnimation(view: View, endListener: () -> Unit) {
 
-        private val ANIMATION_DISAPPEAR = PropertyValuesHolder.ofFloat(
-            "alpha",
-            1f,
-            0f
+        val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            ANIMATION_APPEAR
         )
-        private val ANIMATION_APPEAR = PropertyValuesHolder.ofFloat(
-            "alpha",
-            0f,
-            1f
-        )
+
+        objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+
+                endListener()
+            }
+        })
+
+        objectAnimator.duration = ANIMATION_LENGTH_SHORT
+
+        objectAnimator.start()
 
     }
+
+    fun disappearEditEventAnimation(view: View, endListener: () -> Unit) {
+        // ObjectAnimatorにセットする
+        val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            ANIMATION_DISAPPEAR
+        )
+
+        objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+
+                endListener()
+            }
+        })
+
+        objectAnimator.duration = ANIMATION_LENGTH_MIDDLE
+
+        objectAnimator.start()
+    }
+
 
 }

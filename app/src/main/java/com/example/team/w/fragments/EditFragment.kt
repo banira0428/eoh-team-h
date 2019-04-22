@@ -62,7 +62,7 @@ class EditFragment : Fragment() {
         binding.listEvent.adapter = adapter
 
         binding.buttonAddEvent.setOnClickListener {
-            adapter.documents.add(0, Document())
+            adapter.documents.add(0, Document(event = Event(name = getString(R.string.new_event))))
             adapter.notifyItemInserted(0)
             binding.listEvent.scrollToPosition(0)
         }

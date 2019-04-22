@@ -26,8 +26,6 @@ class PlayFragment : Fragment() {
 
     private lateinit var binding: PlayFragmentBinding
 
-    private lateinit var animationManager: AnimationManager
-
     private var eventPosition = 0
 
     private var events: Array<Event> = arrayOf(
@@ -43,11 +41,9 @@ class PlayFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(PlayViewModel::class.java)
 
-        animationManager = AnimationManager()
-
         val size = Point()
         activity?.windowManager?.defaultDisplay?.getSize(size)
-        animationManager.screenwidth = size.x
+        AnimationManager.screenwidth = size.x
 
         appear()
 
@@ -59,10 +55,10 @@ class PlayFragment : Fragment() {
         if (eventPosition >= events.size) return
 
         binding.textEvent.text = events[eventPosition].name
-        animationManager.arrowAnimation(binding.textArrow,events[eventPosition].wareki)
+        AnimationManager.arrowAnimation(binding.textArrow,events[eventPosition].wareki)
         eventPosition++
 
-        animationManager.appearAnimation(binding.cardEvent, endListener = {
+        AnimationManager.appearAnimation(binding.cardEvent, endListener = {
 
             Handler().postDelayed({
                 disappear()
@@ -72,7 +68,7 @@ class PlayFragment : Fragment() {
     }
 
     private fun disappear() {
-        animationManager.disappearAnimation(binding.cardEvent, endListener = {
+        AnimationManager.disappearAnimation(binding.cardEvent, endListener = {
             appear()
         })
     }
