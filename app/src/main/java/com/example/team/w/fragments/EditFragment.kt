@@ -49,15 +49,6 @@ class EditFragment : Fragment() {
         adapter = EventAdapter(requireContext())
 
         adapter.setOnClickListener(object : EventAdapter.OnClickListener {
-            override fun onClickSetDate(position: Int) {
-                val dialog = DatePickerDialog(requireContext())
-
-                dialog.datePicker.touchables[0].performClick()
-                dialog.setOnDateSetListener { datePicker, year, month, day ->
-                    Toast.makeText(requireContext(),"$year/$month/$day",Toast.LENGTH_SHORT).show()
-                }
-                dialog.show()
-            }
 
             override fun onClickSetImage(position: Int) {
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

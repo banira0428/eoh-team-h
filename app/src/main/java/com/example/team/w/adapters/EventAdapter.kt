@@ -39,7 +39,6 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
     interface OnClickListener {
         fun onClickSetImage(position: Int)
-        fun onClickSetDate(position: Int)
     }
 
     fun setOnClickListener(listener: EventAdapter.OnClickListener) {
