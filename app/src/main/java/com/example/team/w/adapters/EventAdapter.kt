@@ -59,13 +59,13 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             holder.editEventName.setText(documents[holder.adapterPosition].event.name)
             holder.editEventName.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    documents[holder.adapterPosition].event.name = s.toString()
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    documents[holder.adapterPosition].event.name = s.toString()
                 }
 
             })
@@ -76,6 +76,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             holder.spinnerYear.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     documents[holder.adapterPosition].event.wareki = position
+
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -117,6 +118,8 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             holder.buttonClose.setOnClickListener {
 
                 if (AnimationManager.animationJobs > 0) return@setOnClickListener
+
+                notifyItemChanged(holder.adapterPosition)
 
                 holder.layoutEdit.visibility = View.GONE
 
