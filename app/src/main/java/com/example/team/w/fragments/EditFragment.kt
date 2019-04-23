@@ -1,11 +1,9 @@
 package com.example.team.w.fragments
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,7 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.team.w.R
 import com.example.team.w.adapters.EventAdapter
@@ -68,21 +66,22 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonPlayEvents.setOnClickListener {
-            findNavController().navigate(R.id.action_edit_to_play)
+            val action = EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray())
+            findNavController().navigate(action)
         }
 
         binding.buttonSaveEvents.setOnClickListener {
-            viewModel.saveEvents(adapter.documents,adapter.needDeleteDocuments)
+            viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
         }
 
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
-            it?.also{
+            it?.also {
                 val documents = ArrayList<Document>()
 
                 it.forEach { document ->
                     val event = document.toObject(Event::class.java)
                     event?.also {
-                        documents.add(Document(id = document.id,event = event))
+                        documents.add(Document(id = document.id, event = event))
                     }
                 }
 
@@ -106,7 +105,7 @@ class EditFragment : Fragment() {
                     adapter.setImageResource(uri ?: Uri.EMPTY)
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    Log.e("error","can't set image")
+                    Log.e("error", "can't set image")
                 }
 
             }
@@ -114,14 +113,14 @@ class EditFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_eop,menu)
+        inflater?.inflate(R.menu.menu_eop, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
-        when(item?.itemId){
-            R.id.action_credit ->{
+        when (item?.itemId) {
+            R.id.action_credit -> {
                 findNavController().navigate(R.id.action_edit_to_credit)
             }
         }

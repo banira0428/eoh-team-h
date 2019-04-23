@@ -1,19 +1,20 @@
 package com.example.team.w.fragments
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.example.team.w.R
 import com.example.team.w.databinding.PlayFragmentBinding
 import com.example.team.w.models.AnimationManager
-import com.example.team.w.models.Event
+import com.example.team.w.models.Document
 
 class PlayFragment : Fragment() {
 
@@ -28,10 +29,6 @@ class PlayFragment : Fragment() {
 
     private var eventPosition = 0
 
-    private var events: Array<Event> = arrayOf(
-        Event(name = "イベント1",wareki = 0), Event(name = "イベント2",wareki = 8), Event(name = "イベント3",wareki = 10), Event(name = "イベント4",wareki = 15)
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,31 +42,43 @@ class PlayFragment : Fragment() {
         activity?.windowManager?.defaultDisplay?.getSize(size)
         AnimationManager.screenwidth = size.x
 
-        appear()
-
         return binding.root
     }
 
-    private fun appear() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.livedata.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                appear(it)
+            }
+        })
+        viewModel.start(PlayFragmentArgs.fromBundle(arguments ?: return).documentList.toList())
+    }
 
-        if (eventPosition >= events.size) return
-
-        binding.textEvent.text = events[eventPosition].name
-        AnimationManager.arrowAnimation(binding.textArrow,events[eventPosition].wareki)
+    private fun appear(item: List<Document>) {
+        if (eventPosition >= viewModel.getDocumentsSize()){
+            findNavController().popBackStack()
+            return
+        }
+        binding.playCardTitle.text = "${item[eventPosition].event.name} "
+        binding.playCardDesc.text = "${item[eventPosition].event.desc} "
+        AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki)
+        binding.textPlayingYear.text = "H ${item[eventPosition].event.wareki} "
         eventPosition++
 
         AnimationManager.appearAnimation(binding.cardEvent, endListener = {
 
             Handler().postDelayed({
-                disappear()
+                disappear(item)
             }, SHOW_EVENT_TIME)
 
         })
     }
 
-    private fun disappear() {
-        AnimationManager.disappearAnimation(binding.cardEvent, endListener = {
-            appear()
-        })
+    private fun disappear(item: List<Document>) {
+        AnimationManager.disappearAnimation(binding.cardEvent) {
+            appear(item)
+        }
     }
+
 }
