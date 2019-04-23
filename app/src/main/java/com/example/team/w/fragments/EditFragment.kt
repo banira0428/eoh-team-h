@@ -1,12 +1,10 @@
 package com.example.team.w.fragments
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,7 +13,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.team.w.MainActivity
 import com.example.team.w.R
@@ -82,7 +80,8 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonPlayEvents.setOnClickListener {
-            findNavController().navigate(R.id.action_edit_to_play)
+            val action = EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray())
+            findNavController().navigate(action)
         }
 
         binding.buttonSaveEvents.setOnClickListener {
