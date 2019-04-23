@@ -1,7 +1,6 @@
 package com.example.team.w.adapters
 
 import android.content.Context
-import android.net.Uri
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -10,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.team.w.R
-import com.example.team.w.models.Document
 import android.widget.AdapterView.OnItemSelectedListener
+import com.example.team.w.GlideApp
+import com.example.team.w.R
 import com.example.team.w.models.AnimationManager
+import com.example.team.w.models.Document
+import com.google.firebase.storage.FirebaseStorage
 
 
 class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
@@ -99,9 +100,13 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
                 listener?.onClickSetImage(holder.adapterPosition)
             }
 
-//            if(events[position].imageURI != Uri.EMPTY){
-//                holder.imageEvent.setImageURI(events[position].imageURI)
-//            }
+            if(documents[position].event.image_url.isNotEmpty()){
+
+                val ref = FirebaseStorage.getInstance().reference.child(documents[position].event.image_url)
+
+                GlideApp.with(context).load(ref).into(holder.imageEvent)
+                GlideApp.with(context).load(ref).into(holder.imageEventPreview)
+            }
 
             holder.buttonDelete.setOnClickListener {
                 needDeleteDocuments.add(documents[holder.adapterPosition])
@@ -151,14 +156,15 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         return VIEW_TYPE_ADD
     }
 
-    fun setImageResource(uri: Uri) {
-        //events[selectedItemPosition].imageURI = uri
+    fun setImageURL(url: String) {
+        documents[selectedItemPosition].event.image_url = url
         notifyDataSetChanged()
     }
 
     abstract class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     class EventViewHolder(v: View) : ViewHolder(v) {
+        val imageEventPreview: ImageButton = v.findViewById(R.id.image_event_preview)
         val textEventName: TextView = v.findViewById(R.id.text_event_name)
         val textEventYear: TextView = v.findViewById(R.id.text_event_year)
         val editEventName: EditText = v.findViewById(R.id.edit_event_name)

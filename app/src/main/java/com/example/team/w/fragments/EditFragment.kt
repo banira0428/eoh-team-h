@@ -23,6 +23,7 @@ import com.example.team.w.adapters.EventAdapter
 import com.example.team.w.databinding.EditFragmentBinding
 import com.example.team.w.models.Document
 import com.example.team.w.models.Event
+import com.example.team.w.models.FirebaseRepository
 import java.io.IOException
 
 
@@ -99,7 +100,7 @@ class EditFragment : Fragment() {
                     }
                 }
 
-                adapter.documents = documents
+                adapter.documents = ArrayList(documents.sortedBy { it.event.wareki })
                 adapter.needDeleteDocuments = ArrayList()
             }
         })
@@ -116,7 +117,14 @@ class EditFragment : Fragment() {
                 val uri = result.data
 
                 try {
-                    adapter.setImageResource(uri ?: Uri.EMPTY)
+                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+
+                    val url = "${FirebaseRepository.uuid}/${System.currentTimeMillis()}"
+
+                    viewModel.uploadImage(bitmap,url,endListener = {
+                        adapter.setImageURL(url)
+                    })
+
                 } catch (e: IOException) {
                     e.printStackTrace()
                     Log.e("error", "can't set image")
