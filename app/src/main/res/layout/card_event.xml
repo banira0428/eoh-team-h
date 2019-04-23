@@ -94,7 +94,7 @@
                     android:layout_margin="@dimen/element_spacing_normal"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/baseline_cancel_black_24"
+                    android:src="@drawable/ic_cancel"
                     android:background="@null"
                     android:contentDescription="@null"/>
 

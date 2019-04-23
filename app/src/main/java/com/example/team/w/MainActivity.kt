@@ -4,7 +4,10 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import androidx.navigation.findNavController
+import com.example.team.w.fragments.PlayFragment
 import com.example.team.w.models.FirebaseRepository
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,5 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val PREF_UNIQUE_ID = "PREF_UNIQUE_ID"
+    }
+
+    override fun onBackPressed() {
+        if(main_nav_host.childFragmentManager.fragments[0] !is PlayFragment){
+            super.onBackPressed()
+        }
     }
 }
