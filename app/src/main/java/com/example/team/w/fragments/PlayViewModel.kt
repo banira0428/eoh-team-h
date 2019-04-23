@@ -9,10 +9,10 @@ class PlayViewModel : ViewModel() {
     var livedata = MutableLiveData<List<Document>>()
 
     fun start(list: List<Document>) {
-        documents =list
+        documents = list.sortedBy { it.event.wareki }
         livedata.postValue(documents)
     }
 
-    fun getDocumentsSize():Int = documents.size
+    fun getDocumentsSize(): Int = documents.size
 
 }

@@ -15,6 +15,7 @@ import com.example.team.w.R
 import com.example.team.w.databinding.PlayFragmentBinding
 import com.example.team.w.models.AnimationManager
 import com.example.team.w.models.Document
+import kotlinx.android.synthetic.main.play_fragment.*
 
 class PlayFragment : Fragment() {
 
@@ -52,11 +53,14 @@ class PlayFragment : Fragment() {
                 appear(it)
             }
         })
+        AnimationManager.arrowPosition = 0f
+        AnimationManager.previousPosition = 0
+        text_arrow.translationX = 0f
         viewModel.start(PlayFragmentArgs.fromBundle(arguments ?: return).documentList.toList())
     }
 
     private fun appear(item: List<Document>) {
-        if (eventPosition >= viewModel.getDocumentsSize()){
+        if (eventPosition >= viewModel.getDocumentsSize()) {
             findNavController().popBackStack()
             return
         }
