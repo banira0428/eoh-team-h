@@ -3,16 +3,19 @@ package com.example.team.w.fragments
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.team.w.MainActivity
 import com.example.team.w.R
 import com.example.team.w.adapters.EventAdapter
 import com.example.team.w.databinding.EditFragmentBinding
@@ -60,7 +63,17 @@ class EditFragment : Fragment() {
         binding.listEvent.adapter = adapter
 
         binding.buttonAddEvent.setOnClickListener {
-            adapter.documents.add(0, Document(event = Event(name = getString(R.string.new_event))))
+            adapter.documents.add(
+                0,
+                Document(
+                    event = Event(
+                        device_id = requireContext().getSharedPreferences(
+                            MainActivity.PREF_UNIQUE_ID,
+                            Context.MODE_PRIVATE
+                        ).getString("UUID", "") ?: "", name = getString(R.string.new_event)
+                    )
+                )
+            )
             adapter.notifyItemInserted(0)
             binding.listEvent.scrollToPosition(0)
         }
