@@ -2,13 +2,17 @@ package com.example.team.w.models
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.WriteBatch
+import java.util.*
 
 object FirebaseRepository {
 
     private var events: MutableLiveData<List<DocumentSnapshot>>? = null
+
+    var uuid = ""
 
     fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>) {
 
@@ -51,15 +55,15 @@ object FirebaseRepository {
     }
 
     private fun loadEvents(){
+        
         val db = FirebaseFirestore.getInstance()
         db.collection("events")
-            //.whereEqualTo("userId", userId)
-            .orderBy("wareki")
+            //.orderBy("wareki")
+            .whereEqualTo("device_id",uuid)
             .get()
             .addOnCompleteListener {
                 events?.postValue(it.result?.documents)
             }
-
     }
 
 
