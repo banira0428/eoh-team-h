@@ -19,6 +19,7 @@ import com.example.team.w.MainActivity
 import com.example.team.w.R
 import com.example.team.w.adapters.EventAdapter
 import com.example.team.w.databinding.EditFragmentBinding
+import com.example.team.w.models.AnimationManager
 import com.example.team.w.models.Document
 import com.example.team.w.models.Event
 import com.example.team.w.models.FirebaseRepository
@@ -85,11 +86,17 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonSaveEvents.setOnClickListener {
+            binding.progress.visibility = View.VISIBLE
+            binding.listEvent.visibility = View.GONE
             viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
         }
 
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
             it?.also {
+                binding.progress.visibility = View.GONE
+                binding.listEvent.visibility = View.VISIBLE
+                AnimationManager.appearEditEventAnimation(binding.listEvent){}
+
                 val documents = ArrayList<Document>()
 
                 it.forEach { document ->
@@ -99,7 +106,7 @@ class EditFragment : Fragment() {
                     }
                 }
 
-                adapter.documents = ArrayList(documents.sortedBy { it.event.wareki })
+                adapter.documents = ArrayList(documents.sortedBy { it.event.wareki * -1})
                 adapter.needDeleteDocuments = ArrayList()
             }
         })
