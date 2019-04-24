@@ -53,8 +53,16 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
         if (holder is EventViewHolder) {
 
+            if(documents[holder.adapterPosition].isEditing){
+                holder.layoutEdit.visibility = View.VISIBLE
+                holder.layoutNormal.visibility = View.GONE
+            }else{
+                holder.layoutEdit.visibility = View.GONE
+                holder.layoutNormal.visibility = View.VISIBLE
+            }
+
             holder.textEventName.text = documents[holder.adapterPosition].event.name
-            holder.textEventYear.text = context.getString(R.string.year,documents[holder.adapterPosition].event.wareki + 1 )
+            holder.textEventYear.text = "平成${if (documents[holder.adapterPosition].event.wareki == 0) "元" else documents[holder.adapterPosition].event.wareki + 1}年"
 
             holder.editEventName.setText(documents[holder.adapterPosition].event.name)
             holder.editEventName.addTextChangedListener(object : TextWatcher {
@@ -76,7 +84,6 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             holder.spinnerYear.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     documents[holder.adapterPosition].event.wareki = position
-
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -101,12 +108,13 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
                 listener?.onClickSetImage(holder.adapterPosition)
             }
 
-            if(documents[position].event.image_url.isNotEmpty()){
-
-                val ref = FirebaseStorage.getInstance().reference.child(documents[position].event.image_url)
-
+            if(documents[holder.adapterPosition].event.image_url.isNotEmpty()){
+                val ref = FirebaseStorage.getInstance().reference.child(documents[holder.adapterPosition].event.image_url)
                 GlideApp.with(context).load(ref).into(holder.imageEvent)
                 GlideApp.with(context).load(ref).into(holder.imageEventPreview)
+            }else{
+                holder.imageEvent.setImageDrawable(null)
+                holder.imageEventPreview.setImageDrawable(null)
             }
 
             holder.buttonDelete.setOnClickListener {
@@ -118,12 +126,11 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             holder.buttonClose.setOnClickListener {
 
                 if (AnimationManager.animationJobs > 0) return@setOnClickListener
-
-                notifyItemChanged(holder.adapterPosition)
-
+                notifyDataSetChanged()
                 holder.layoutEdit.visibility = View.GONE
-
                 holder.layoutNormal.visibility = View.VISIBLE
+
+                documents[position].isEditing = false
 
             }
 
@@ -138,6 +145,9 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
                     holder.layoutNormal.visibility = View.GONE
 
                 }
+
+                documents[holder.adapterPosition].isEditing = true
+
             }
         }
 
