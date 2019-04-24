@@ -61,7 +61,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:contentDescription="@null"
-                        android:scaleType="fitCenter"
+                        android:scaleType="centerCrop"
                         android:src="@color/red"
                         android:text="image"
                         app:layout_constraintEnd_toEndOf="parent"
