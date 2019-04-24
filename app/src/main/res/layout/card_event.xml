@@ -20,12 +20,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <ImageButton
+            <ImageView
                     android:id="@+id/image_event_preview"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginStart="@dimen/element_spacing_normal"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:src="@color/red"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +69,9 @@
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginStart="@dimen/element_spacing_normal"
-                    android:scaleType="fitCenter"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:scaleType="centerCrop"
+                    android:src="@color/red"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:contentDescription="@null"/>

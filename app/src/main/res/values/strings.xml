@@ -6,4 +6,5 @@
     <string name="credit">クレジット</string>
     <string name="year">平成%1$d年</string>
     <string name="new_event">新しいイベント</string>
+    <string name="edit">イベント編集</string>
 </resources>
