@@ -20,18 +20,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <ImageView
+            <ImageButton
                     android:id="@+id/image_event_preview"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginStart="@dimen/element_spacing_normal"
+                    android:layout_width="@dimen/card_image_size"
+                    android:layout_height="@dimen/card_image_size"
                     android:scaleType="centerCrop"
-                    android:padding="@dimen/element_spacing_normal"
-                    android:src="@color/red"
+                    android:layout_margin="@dimen/element_spacing_normal"
+                    android:background="@drawable/background_image"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@null"/>
+                    android:contentDescription="@null"
+                    android:clickable="false"
+            />
 
             <TextView
                     android:id="@+id/text_event_name"
@@ -66,12 +67,11 @@
 
             <ImageButton
                     android:id="@+id/image_event"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginStart="@dimen/element_spacing_normal"
-                    android:padding="@dimen/element_spacing_normal"
+                    android:layout_width="@dimen/card_image_size"
+                    android:layout_height="@dimen/card_image_size"
+                    android:layout_margin="@dimen/element_spacing_normal"
                     android:scaleType="centerCrop"
-                    android:src="@color/red"
+                    android:background="@drawable/background_image"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:contentDescription="@null"/>
@@ -107,7 +107,9 @@
             <Spinner
                     android:id="@+id/spinner_year"
                     android:layout_width="match_parent"
-                    android:layout_margin="@dimen/element_spacing_small"
+                    android:layout_marginTop="@dimen/element_spacing_large"
+                    android:layout_marginStart="@dimen/element_spacing_small"
+                    android:layout_marginEnd="@dimen/element_spacing_small"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/image_event"/>
 

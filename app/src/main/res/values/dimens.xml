@@ -2,6 +2,9 @@
 <resources>
 
     <dimen name="element_spacing_xlarge">24dp</dimen>
+    <dimen name="element_spacing_large">12dp</dimen>
     <dimen name="element_spacing_normal">8dp</dimen>
     <dimen name="element_spacing_small">4dp</dimen>
+
+    <dimen name="card_image_size">64dp</dimen>
 </resources>

@@ -109,12 +109,16 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             }
 
             if(documents[holder.adapterPosition].event.image_url.isNotEmpty()){
+                holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+                holder.imageEvent.scaleType = ImageView.ScaleType.CENTER_CROP
                 val ref = FirebaseStorage.getInstance().reference.child(documents[holder.adapterPosition].event.image_url)
                 GlideApp.with(context).load(ref).into(holder.imageEvent)
                 GlideApp.with(context).load(ref).into(holder.imageEventPreview)
             }else{
-                holder.imageEvent.setImageDrawable(null)
-                holder.imageEventPreview.setImageDrawable(null)
+                holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER
+                holder.imageEvent.scaleType = ImageView.ScaleType.CENTER
+                holder.imageEvent.setImageResource(R.drawable.ic_insert_photo)
+                holder.imageEventPreview.setImageResource(R.drawable.ic_insert_photo)
             }
 
             holder.buttonDelete.setOnClickListener {
@@ -177,7 +181,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
     abstract class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     class EventViewHolder(v: View) : ViewHolder(v) {
-        val imageEventPreview: ImageView = v.findViewById(R.id.image_event_preview)
+        val imageEventPreview: ImageButton = v.findViewById(R.id.image_event_preview)
         val textEventName: TextView = v.findViewById(R.id.text_event_name)
         val textEventYear: TextView = v.findViewById(R.id.text_event_year)
         val editEventName: EditText = v.findViewById(R.id.edit_event_name)
