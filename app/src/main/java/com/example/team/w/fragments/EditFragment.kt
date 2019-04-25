@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
@@ -23,6 +24,7 @@ import com.example.team.w.models.AnimationManager
 import com.example.team.w.models.Document
 import com.example.team.w.models.Event
 import com.example.team.w.models.FirebaseRepository
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import java.io.IOException
 
 
@@ -42,8 +44,6 @@ class EditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
 
@@ -114,6 +114,10 @@ class EditFragment : Fragment() {
             }
         })
 
+        val activity = activity as AppCompatActivity?
+        activity?.setSupportActionBar(binding.toolbar)
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
@@ -152,7 +156,7 @@ class EditFragment : Fragment() {
 
         when (item?.itemId) {
             R.id.action_credit -> {
-                findNavController().navigate(R.id.action_edit_to_credit)
+                startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
             }
         }
 
