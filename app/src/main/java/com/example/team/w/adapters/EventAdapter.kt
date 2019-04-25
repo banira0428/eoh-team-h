@@ -1,7 +1,11 @@
 package com.example.team.w.adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.net.Uri
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.CircularProgressDrawable
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +22,7 @@ import com.example.team.w.models.Document
 import com.google.firebase.storage.FirebaseStorage
 
 
-class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     var documents: ArrayList<Document> = ArrayList()
         set(value) {
@@ -32,7 +36,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
     private val yearAdapter = ArrayAdapter(
         context,
-        android.R.layout.simple_spinner_item, Array(31) { i -> "平成${if (i == 0) "元" else i+1}年" }
+        android.R.layout.simple_spinner_item, Array(31) { i -> "平成${if (i == 0) "元" else i + 1}年" }
     )
 
     private var listener: EventAdapter.OnClickListener? = null
@@ -50,119 +54,126 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         return documents.size
     }
 
-    override fun onBindViewHolder(holder: EventAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EventAdapter.EventViewHolder, position: Int) {
 
-        if (holder is EventViewHolder) {
 
-            if(documents[holder.adapterPosition].isEditing){
-                holder.layoutEdit.visibility = View.VISIBLE
-                holder.layoutNormal.visibility = View.GONE
-            }else{
-                holder.layoutEdit.visibility = View.GONE
-                holder.layoutNormal.visibility = View.VISIBLE
+        if (documents[holder.adapterPosition].isEditing) {
+            holder.layoutEdit.visibility = View.VISIBLE
+            holder.layoutNormal.visibility = View.GONE
+        } else {
+            holder.layoutEdit.visibility = View.GONE
+            holder.layoutNormal.visibility = View.VISIBLE
+        }
+
+        holder.textEventName.text = documents[holder.adapterPosition].event.name
+        holder.textEventYear.text =
+            "平成${if (documents[holder.adapterPosition].event.wareki == 1) "元" else documents[holder.adapterPosition].event.wareki}年"
+
+        holder.editEventName.setText(documents[holder.adapterPosition].event.name)
+        holder.editEventName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
             }
 
-            holder.textEventName.text = documents[holder.adapterPosition].event.name
-            holder.textEventYear.text = "平成${if (documents[holder.adapterPosition].event.wareki == 1) "元" else documents[holder.adapterPosition].event.wareki }年"
-
-            holder.editEventName.setText(documents[holder.adapterPosition].event.name)
-            holder.editEventName.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    documents[holder.adapterPosition].event.name = s.toString()
-                }
-
-            })
-
-            yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            holder.spinnerYear.adapter = yearAdapter
-            holder.spinnerYear.setSelection(documents[holder.adapterPosition].event.wareki - 1)
-            holder.spinnerYear.onItemSelectedListener = object : OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    documents[holder.adapterPosition].event.wareki = position + 1
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            holder.editEventDesc.setText(documents[holder.adapterPosition].event.desc)
-            holder.editEventDesc.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    documents[holder.adapterPosition].event.desc = s.toString()
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-
-            })
-            holder.imageEvent.setOnClickListener {
-                selectedItemPosition = holder.adapterPosition
-                listener?.onClickSetImage(holder.adapterPosition)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                documents[holder.adapterPosition].event.name = s.toString()
             }
 
-            if(documents[holder.adapterPosition].event.image_url.isNotEmpty()){
-                holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER_CROP
-                holder.imageEvent.scaleType = ImageView.ScaleType.CENTER_CROP
-//                val ref = FirebaseStorage.getInstance().reference.child(documents[holder.adapterPosition].event.image_url)
-//                GlideApp.with(context).load(ref).into(holder.imageEvent)
-//                GlideApp.with(context).load(ref).into(holder.imageEventPreview)
+        })
 
-                Glide.with(context).load(documents[holder.adapterPosition].event.image_url).into(holder.imageEventPreview)
-                Glide.with(context).load(documents[holder.adapterPosition].event.image_url).into(holder.imageEvent)
-
-            }else{
-                holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER
-                holder.imageEvent.scaleType = ImageView.ScaleType.CENTER
-                holder.imageEvent.setImageResource(R.drawable.ic_insert_photo)
-                holder.imageEventPreview.setImageResource(R.drawable.ic_insert_photo)
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        holder.spinnerYear.adapter = yearAdapter
+        holder.spinnerYear.setSelection(documents[holder.adapterPosition].event.wareki - 1)
+        holder.spinnerYear.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                documents[holder.adapterPosition].event.wareki = position + 1
             }
 
-            holder.buttonDelete.setOnClickListener {
-                needDeleteDocuments.add(documents[holder.adapterPosition])
-                documents.removeAt(holder.adapterPosition)
-                notifyItemRemoved(holder.adapterPosition)
-            }
-
-            holder.buttonClose.setOnClickListener {
-
-                if (AnimationManager.animationJobs > 0) return@setOnClickListener
-                notifyDataSetChanged()
-                holder.layoutEdit.visibility = View.GONE
-                holder.layoutNormal.visibility = View.VISIBLE
-
-                documents[position].isEditing = false
-
-            }
-
-
-            holder.itemView.setOnClickListener {
-
-                if (AnimationManager.animationJobs > 0) return@setOnClickListener
-
-                if (holder.layoutEdit.visibility == View.GONE) {
-                    holder.layoutEdit.visibility = View.VISIBLE
-                    AnimationManager.appearEditEventAnimation(holder.layoutEdit, endListener = {})
-                    holder.layoutNormal.visibility = View.GONE
-
-                }
-
-                documents[holder.adapterPosition].isEditing = true
-
+            override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
 
+        holder.editEventDesc.setText(documents[holder.adapterPosition].event.desc)
+        holder.editEventDesc.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                documents[holder.adapterPosition].event.desc = s.toString()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
+        holder.imageEvent.setOnClickListener {
+            selectedItemPosition = holder.adapterPosition
+            listener?.onClickSetImage(holder.adapterPosition)
+        }
+
+        if (documents[holder.adapterPosition].event.image_url.isNotEmpty()) { //Firebaseから取得
+
+            holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+            holder.imageEvent.scaleType = ImageView.ScaleType.CENTER_CROP
+
+            val circularProgressDrawable = CircularProgressDrawable(context)
+            circularProgressDrawable.setColorSchemeColors(Color.WHITE)
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
+
+            Glide.with(context).load(documents[holder.adapterPosition].event.image_url)
+                .placeholder(circularProgressDrawable).into(holder.imageEventPreview)
+            Glide.with(context).load(documents[holder.adapterPosition].event.image_url)
+                .placeholder(circularProgressDrawable).into(holder.imageEvent)
+
+        } else {
+
+            holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER
+            holder.imageEvent.scaleType = ImageView.ScaleType.CENTER
+            holder.imageEvent.setImageResource(R.drawable.ic_insert_photo)
+            holder.imageEventPreview.setImageResource(R.drawable.ic_insert_photo)
+        }
+
+        holder.buttonDelete.setOnClickListener {
+            needDeleteDocuments.add(documents[holder.adapterPosition])
+            documents.removeAt(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
+        }
+
+        holder.buttonClose.setOnClickListener {
+
+            if (AnimationManager.animationJobs > 0) return@setOnClickListener
+            notifyDataSetChanged()
+            holder.layoutEdit.visibility = View.GONE
+            holder.layoutNormal.visibility = View.VISIBLE
+
+            documents[position].isEditing = false
+
+        }
+
+
+        holder.itemView.setOnClickListener {
+
+            if (AnimationManager.animationJobs > 0) return@setOnClickListener
+
+            if (holder.layoutEdit.visibility == View.GONE) {
+                holder.layoutEdit.visibility = View.VISIBLE
+                AnimationManager.appearEditEventAnimation(holder.layoutEdit, endListener = {})
+                holder.layoutNormal.visibility = View.GONE
+
+            }
+
+            documents[holder.adapterPosition].isEditing = true
+
+        }
+
+
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventAdapter.EventViewHolder {
 
         return EventViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -183,9 +194,8 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         notifyDataSetChanged()
     }
 
-    abstract class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
-    class EventViewHolder(v: View) : ViewHolder(v) {
+    class EventViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val imageEventPreview: ImageButton = v.findViewById(R.id.image_event_preview)
         val textEventName: TextView = v.findViewById(R.id.text_event_name)
         val textEventYear: TextView = v.findViewById(R.id.text_event_year)

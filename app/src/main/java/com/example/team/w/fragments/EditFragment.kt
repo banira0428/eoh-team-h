@@ -81,6 +81,7 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonPlayEvents.setOnClickListener {
+            viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
             val action = EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray())
             findNavController().navigate(action)
         }
