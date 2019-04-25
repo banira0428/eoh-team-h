@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.team.w.GlideApp
 import com.example.team.w.R
 import com.example.team.w.databinding.PlayFragmentBinding
@@ -65,7 +66,8 @@ class PlayFragment : Fragment() {
             findNavController().popBackStack()
             return
         }
-        GlideApp.with(context!!).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+
+        Glide.with(requireContext()).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
         binding.playCardTitle.text = "${item[eventPosition].event.name} "
         binding.playCardDesc.text = "${item[eventPosition].event.desc} "
         AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki)

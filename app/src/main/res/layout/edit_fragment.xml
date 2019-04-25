@@ -6,6 +6,7 @@
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/background"
             tools:context=".fragments.EditFragment">
 
         <android.support.v7.widget.Toolbar
@@ -24,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:layout_constraintBottom_toTopOf="@id/button_play_events"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:visibility="gone"/>
 
         <ProgressBar
@@ -32,40 +33,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/button_play_events"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
         />
 
         <ImageButton
+                style="@style/MyMenuItemStyle"
                 android:id="@+id/button_add_event"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/button_play_events"
+                android:background="@drawable/background_image"
                 android:src="@drawable/ic_action_add"
-                android:contentDescription="@null"
         />
 
         <ImageButton
+                style="@style/MyMenuItemStyle"
                 android:id="@+id/button_play_events"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/button_save_events"
+                android:background="@drawable/background_image"
                 android:src="@drawable/ic_action_playback_play"
-                android:contentDescription="@null"
         />
 
         <ImageButton
+                style="@style/MyMenuItemStyle"
                 android:id="@+id/button_save_events"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/background_image"
                 android:src="@drawable/ic_action_save"
-                android:contentDescription="@null"
+                android:clickable="false"
         />
 
     </android.support.constraint.ConstraintLayout>

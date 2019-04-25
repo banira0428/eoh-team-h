@@ -21,7 +21,6 @@ class EditViewModel : ViewModel() {
 
     fun uploadImage(bitmap: Bitmap,url: String,endListener: () -> Unit){
         FirebaseRepository.uploadImage(bitmap,url,endListener)
-
     }
 
 }

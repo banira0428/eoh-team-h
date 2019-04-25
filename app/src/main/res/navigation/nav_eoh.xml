@@ -12,6 +12,8 @@
 
         <action
                 android:id="@+id/action_edit_to_play"
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
                 app:destination="@id/playFragment">
         </action>
 

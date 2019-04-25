@@ -86,6 +86,7 @@ class EditFragment : Fragment() {
         }
 
         binding.buttonSaveEvents.setOnClickListener {
+            binding.buttonSaveEvents.isEnabled = false
             binding.progress.visibility = View.VISIBLE
             binding.listEvent.visibility = View.GONE
             viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
@@ -93,6 +94,7 @@ class EditFragment : Fragment() {
 
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
             it?.also {
+                binding.buttonSaveEvents.isEnabled = true
                 binding.progress.visibility = View.GONE
                 binding.listEvent.visibility = View.VISIBLE
                 AnimationManager.appearEditEventAnimation(binding.listEvent){}
@@ -128,7 +130,7 @@ class EditFragment : Fragment() {
                     val url = "${FirebaseRepository.uuid}/${System.currentTimeMillis()}"
 
                     viewModel.uploadImage(bitmap,url,endListener = {
-                        adapter.setImageURL(url)
+                        adapter.setImageURL("https://storage.googleapis.com/eoh-team-w.appspot.com/$url")
                     })
 
                 } catch (e: IOException) {

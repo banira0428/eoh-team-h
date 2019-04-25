@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import com.bumptech.glide.Glide
 import com.example.team.w.GlideApp
 import com.example.team.w.R
 import com.example.team.w.models.AnimationManager
@@ -111,9 +112,13 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             if(documents[holder.adapterPosition].event.image_url.isNotEmpty()){
                 holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER_CROP
                 holder.imageEvent.scaleType = ImageView.ScaleType.CENTER_CROP
-                val ref = FirebaseStorage.getInstance().reference.child(documents[holder.adapterPosition].event.image_url)
-                GlideApp.with(context).load(ref).into(holder.imageEvent)
-                GlideApp.with(context).load(ref).into(holder.imageEventPreview)
+//                val ref = FirebaseStorage.getInstance().reference.child(documents[holder.adapterPosition].event.image_url)
+//                GlideApp.with(context).load(ref).into(holder.imageEvent)
+//                GlideApp.with(context).load(ref).into(holder.imageEventPreview)
+
+                Glide.with(context).load(documents[holder.adapterPosition].event.image_url).into(holder.imageEventPreview)
+                Glide.with(context).load(documents[holder.adapterPosition].event.image_url).into(holder.imageEvent)
+
             }else{
                 holder.imageEventPreview.scaleType = ImageView.ScaleType.CENTER
                 holder.imageEvent.scaleType = ImageView.ScaleType.CENTER
@@ -189,7 +194,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         val imageEvent: ImageButton = v.findViewById(R.id.image_event)
         val spinnerYear: Spinner = v.findViewById(R.id.spinner_year)
         val buttonDelete: ImageButton = v.findViewById(R.id.button_delete)
-        val buttonClose: ImageButton = v.findViewById(R.id.button_close)
+        val buttonClose: Button = v.findViewById(R.id.button_close)
 
         val layoutNormal: ConstraintLayout = v.findViewById(R.id.layout_card_normal)
         val layoutEdit: ConstraintLayout = v.findViewById(R.id.layout_card_edit)

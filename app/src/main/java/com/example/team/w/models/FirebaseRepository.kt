@@ -5,11 +5,14 @@ import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.WriteBatch
 import java.util.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -71,7 +74,7 @@ object FirebaseRepository {
             }
     }
 
-    fun uploadImage(bitmap: Bitmap,url: String,endListener: () -> Unit) {
+    fun uploadImage(bitmap: Bitmap, url: String, endListener: () -> Unit) {
         val storage = FirebaseStorage.getInstance()
 
         // Create a storage reference from our app
@@ -85,11 +88,12 @@ object FirebaseRepository {
         uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
         }.addOnSuccessListener {
+
             endListener()
 
         }
 
-    }
 
+    }
 
 }
