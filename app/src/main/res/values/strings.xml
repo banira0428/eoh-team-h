@@ -10,4 +10,12 @@
     <string name="text_close">閉じる ×</string>
     <string name="add_event">イベント追加</string>
     <string name="play_events">再生</string>
+    <string name="msg_delete">削除しました</string>
+    <string name="msg_restore">取り消す</string>
+    <string name="text_year">発生年:</string>
+    <string name="edit_event">イベント編集</string>
+    <string name="replay">もう一度見る</string>
+    <string name="msg_empty">再生するイベントがありません</string>
+    <string name="msg_save">保存しました</string>
+    <string name="year_start">平成元年</string>
 </resources>

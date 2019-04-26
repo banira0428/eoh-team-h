@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
@@ -32,12 +33,6 @@ import java.io.IOException
 
 class EditFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = EditFragment()
-
-        const val REQUEST_IMAGE = 0
-    }
-
     private lateinit var viewModel: EditViewModel
 
     private lateinit var adapter: EventAdapter
@@ -54,17 +49,19 @@ class EditFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.edit_fragment, container, false)
 
         adapter = EventAdapter(requireContext())
-
         adapter.setOnClickListener(object : EventAdapter.OnClickListener {
 
             override fun onClickSetImage(position: Int) {
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 intent.type = "image/*"
-                startActivityForResult(intent, REQUEST_IMAGE)
+                startActivityForResult(intent, position)
+            }
+
+            override fun onClickDelete(position: Int) {
+                deleteEvent(position)
             }
         })
 
-        binding.listEvent.layoutManager = LinearLayoutManager(requireContext())
         binding.listEvent.setHasFixedSize(true)
         binding.listEvent.adapter = adapter
 
@@ -75,7 +72,7 @@ class EditFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, p1: Int) {
-                adapter.deleteEvent(viewHolder.adapterPosition)
+                deleteEvent(viewHolder.adapterPosition)
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.listEvent)
@@ -97,19 +94,6 @@ class EditFragment : Fragment() {
             binding.listEvent.scrollToPosition(0)
         }
 
-//        binding.buttonPlayEvents.setOnClickListener {
-//            viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
-//            val action = EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray())
-//            findNavController().navigate(action)
-//        }
-
-//        binding.buttonSaveEvents.setOnClickListener {
-//            binding.buttonSaveEvents.isEnabled = false
-//            binding.progress.visibility = View.VISIBLE
-//            binding.listEvent.visibility = View.GONE
-//            viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments)
-//        }
-
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
             it?.also {
 
@@ -117,7 +101,6 @@ class EditFragment : Fragment() {
                     it.isEnabled = true
                 }
 
-                binding.buttonSaveEvents.isEnabled = true
                 binding.progress.visibility = View.GONE
                 binding.listEvent.visibility = View.VISIBLE
                 AnimationManager.appearEditEventAnimation(binding.listEvent) {}
@@ -148,27 +131,21 @@ class EditFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) return
         if (result == null) return
 
-        when (requestCode) {
-            REQUEST_IMAGE -> {
-                val uri = result.data
+        val uri = result.data
 
-                try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
 
-                    val url = "${FirebaseRepository.uuid}/${System.currentTimeMillis()}"
-                    adapter.setImageURL("https://storage.googleapis.com/eoh-team-w.appspot.com/$url")
-                    //adapter.setImageURI(uri)
+            val url = "${FirebaseRepository.uuid}/${System.currentTimeMillis()}"
+            adapter.setImageURL(requestCode,"https://storage.googleapis.com/eoh-team-w.appspot.com/$url")
 
-                    viewModel.uploadImage(bitmap, url, endListener = {
-                        adapter.downloadImage()
-                    })
+            viewModel.uploadImage(bitmap, url, endListener = {
+                adapter.downloadImage(requestCode)
+            })
 
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Log.e("error", "can't set image")
-                }
-
-            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("error", "can't set image")
         }
     }
 
@@ -184,20 +161,27 @@ class EditFragment : Fragment() {
                 startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
             }
             R.id.action_play -> {
-                viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {})
-                val action = EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray())
-                findNavController().navigate(action)
+
+                if (adapter.documents.isEmpty()) {
+                    view?.also {
+                        val bar = Snackbar.make(it, getString(R.string.msg_empty), Snackbar.LENGTH_SHORT)
+                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        bar.show()
+                    }
+                } else {
+                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments){}
+                    findNavController().navigate(EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray()))
+                }
             }
             R.id.action_save -> {
 
                 item.isEnabled = false
 
-                binding.buttonSaveEvents.isEnabled = false
                 binding.progress.visibility = View.VISIBLE
                 binding.listEvent.visibility = View.GONE
                 viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
                     view?.also {
-                        val bar = Snackbar.make(it, "保存しました", Snackbar.LENGTH_SHORT)
+                        val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
                         bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
                         bar.show()
                     }
@@ -207,6 +191,19 @@ class EditFragment : Fragment() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteEvent(position: Int) {
+        adapter.deleteEvent(position)
+        view?.also {
+            val bar = Snackbar.make(it, getString(R.string.msg_delete), Snackbar.LENGTH_LONG)
+            bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+            bar.setAction(getString(R.string.msg_restore)) {
+                adapter.restoreEvent(position)
+            }
+            bar.setActionTextColor(Color.WHITE)
+            bar.show()
+        }
     }
 
 }

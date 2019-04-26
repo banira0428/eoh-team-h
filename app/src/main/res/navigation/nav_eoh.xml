@@ -24,6 +24,16 @@
             android:name="com.example.team.w.fragments.PlayFragment"
             tools:layout="@layout/play_fragment">
         <argument android:name="documentList" app:argType="com.example.team.w.models.Document[]"/>
+
+        <action
+                android:id="@+id/action_replay"
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:destination="@id/playFragment"
+                app:popUpTo="@id/editFragment"
+                app:popUpToInclusive="false">
+        </action>
+
     </fragment>
 
 

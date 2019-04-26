@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.team.w.GlideApp
 import com.example.team.w.R
 import com.example.team.w.databinding.PlayFragmentBinding
 import com.example.team.w.models.AnimationManager
@@ -45,6 +44,14 @@ class PlayFragment : Fragment() {
         activity?.windowManager?.defaultDisplay?.getSize(size)
         AnimationManager.screenwidth = size.x
 
+        binding.buttonReplay.setOnClickListener {
+            findNavController().navigate(PlayFragmentDirections.actionReplay(viewModel.livedata.value?.toTypedArray() ?: emptyArray()))
+        }
+
+        binding.buttonEditEvent.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         return binding.root
     }
 
@@ -63,7 +70,9 @@ class PlayFragment : Fragment() {
 
     private fun appear(item: List<Document>) {
         if (eventPosition >= viewModel.getDocumentsSize()) {
-            findNavController().popBackStack()
+
+            binding.layoutMenu.visibility = View.VISIBLE
+            AnimationManager.appearAnimation(binding.layoutMenu){}
             return
         }
 
