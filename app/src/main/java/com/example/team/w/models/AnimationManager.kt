@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.view.View
+import com.example.team.w.ResizeAnimation
 import com.example.team.w.adapters.MyAnimatorListenerAdapter
 
 object AnimationManager {
@@ -136,7 +137,12 @@ object AnimationManager {
         // ObjectAnimatorにセットする
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
             view,
-            ANIMATION_DISAPPEAR
+            ANIMATION_DISAPPEAR,
+            PropertyValuesHolder.ofFloat(
+                "translationY",
+                0f,
+                -200f
+            )
         )
 
         objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
@@ -147,9 +153,17 @@ object AnimationManager {
             }
         })
 
-        objectAnimator.duration = ANIMATION_LENGTH_MIDDLE
+        objectAnimator.duration = ANIMATION_LENGTH_SHORT
 
         objectAnimator.start()
+    }
+
+    fun expandAnimation(view: View,addHeight: Int){
+
+        val anim = ResizeAnimation(view,addHeight,view.height)
+        anim.duration = 300
+        view.startAnimation(anim)
+
     }
 
 

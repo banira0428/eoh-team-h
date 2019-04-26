@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EohApplication</string>
-    <string name="save_event">保存する</string>
+    <string name="save_event">保存</string>
     <string name="hint_event_name">イベント名</string>
     <string name="hint_event_desc">イベント詳細</string>
     <string name="credit">クレジット</string>
@@ -8,4 +8,6 @@
     <string name="new_event">新しいイベント</string>
     <string name="edit">イベント編集</string>
     <string name="text_close">閉じる ×</string>
+    <string name="add_event">イベント追加</string>
+    <string name="play_events">再生</string>
 </resources>
