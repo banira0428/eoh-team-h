@@ -11,6 +11,8 @@ object AnimationManager {
     private const val ANIMATION_LENGTH_SHORT = 300L
     private const val ANIMATION_LENGTH_MIDDLE = 500L
     private const val ANIMATION_LENGTH_LONG = 750L
+    private const val ANIMATION_LENGTH_VERY_LONG = 1000L
+
 
     private val ANIMATION_DISAPPEAR = PropertyValuesHolder.ofFloat(
         "alpha",
@@ -50,7 +52,7 @@ object AnimationManager {
         objectAnimator.start()
     }
 
-    fun disappearAnimation(view: View, endListener: () -> Unit) {
+    fun disappearAnimation(view: View, endListener: () -> Unit): ObjectAnimator {
         // ObjectAnimatorにセットする
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
             view,
@@ -78,9 +80,11 @@ object AnimationManager {
         objectAnimator.duration = ANIMATION_LENGTH_LONG
 
         objectAnimator.start()
+
+        return objectAnimator
     }
 
-    fun appearAnimation(view: View, endListener: () -> Unit) {
+    fun appearAnimation(view: View, endListener: () -> Unit): ObjectAnimator {
         // ObjectAnimatorにセットする
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
             view,
@@ -109,6 +113,27 @@ object AnimationManager {
         objectAnimator.duration = ANIMATION_LENGTH_LONG
 
         objectAnimator.start()
+
+        return objectAnimator
+    }
+
+    fun stayAnimation(view: View, endListener: () -> Unit): ObjectAnimator{
+        val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            view
+        )
+
+        objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                endListener()
+            }
+        })
+
+        objectAnimator.duration = ANIMATION_LENGTH_VERY_LONG
+
+        objectAnimator.start()
+
+        return objectAnimator
     }
 
     fun appearEditEventAnimation(view: View, endListener: () -> Unit) {

@@ -1,5 +1,6 @@
 package com.example.team.w.fragments
 
+import android.animation.ObjectAnimator
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Point
@@ -20,16 +21,13 @@ import kotlinx.android.synthetic.main.play_fragment.*
 
 class PlayFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PlayFragment()
-        const val SHOW_EVENT_TIME: Long = 1000
-    }
-
     private lateinit var viewModel: PlayViewModel
 
     private lateinit var binding: PlayFragmentBinding
 
     private var eventPosition = 0
+
+    private var playingAnimation: ObjectAnimator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +48,22 @@ class PlayFragment : Fragment() {
 
         binding.buttonEditEvent.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.buttonStop.setOnClickListener {
+            viewModel.livedata.postValue(null)
+            findNavController().popBackStack()
+        }
+
+        binding.buttonPause.setOnClickListener {
+
+            if(playingAnimation?.isPaused == true){
+                playingAnimation?.resume()
+                binding.buttonPause.setImageResource(R.drawable.ic_action_playback_pause)
+            }else{
+                playingAnimation?.pause()
+                binding.buttonPause.setImageResource(R.drawable.ic_action_playback_play)
+            }
         }
 
         return binding.root
@@ -76,24 +90,26 @@ class PlayFragment : Fragment() {
             return
         }
 
-        Glide.with(requireContext()).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+        context?.also {
+            Glide.with(it).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+        }
+
         binding.playCardTitle.text = "${item[eventPosition].event.name} "
         binding.playCardDesc.text = "${item[eventPosition].event.desc} "
         AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki)
         binding.textPlayingYear.text = "H ${item[eventPosition].event.wareki} "
         eventPosition++
 
-        AnimationManager.appearAnimation(binding.cardEvent, endListener = {
+        playingAnimation = AnimationManager.appearAnimation(binding.cardEvent, endListener = {
 
-            Handler().postDelayed({
+            playingAnimation = AnimationManager.stayAnimation(binding.cardEvent){
                 disappear(item)
-            }, SHOW_EVENT_TIME)
-
+            }
         })
     }
 
     private fun disappear(item: List<Document>) {
-        AnimationManager.disappearAnimation(binding.cardEvent) {
+        playingAnimation = AnimationManager.disappearAnimation(binding.cardEvent) {
             appear(item)
         }
     }
