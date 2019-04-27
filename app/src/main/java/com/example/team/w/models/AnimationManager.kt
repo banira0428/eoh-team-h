@@ -3,6 +3,7 @@ package com.example.team.w.models
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.util.Log
 import android.view.View
 import com.example.team.w.adapters.MyAnimatorListenerAdapter
 
@@ -25,8 +26,6 @@ object AnimationManager {
         1f
     )
 
-    var arrowPosition = 0f
-
     var previousPosition = 0
 
     var screenwidth = 0
@@ -39,12 +38,11 @@ object AnimationManager {
             view,
             PropertyValuesHolder.ofFloat(
                 "translationX",
-                arrowPosition,
-                arrowPosition + screenwidth / 30 * (position - previousPosition)
+                (previousPosition * (screenwidth) / 33).toFloat() ,
+                ((screenwidth) / 33 * position).toFloat()
             )
         )
 
-        arrowPosition += screenwidth / 30 * (position - previousPosition)
         previousPosition = position
 
         objectAnimator.duration = ANIMATION_LENGTH_LONG

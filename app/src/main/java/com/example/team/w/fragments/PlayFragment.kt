@@ -76,7 +76,6 @@ class PlayFragment : Fragment() {
                 appear(it)
             }
         })
-        AnimationManager.arrowPosition = 0f
         AnimationManager.previousPosition = 0
         text_arrow.translationX = 0f
         viewModel.start(PlayFragmentArgs.fromBundle(arguments ?: return).documentList.toList())
@@ -96,7 +95,7 @@ class PlayFragment : Fragment() {
 
         binding.playCardTitle.text = "${item[eventPosition].event.name} "
         binding.playCardDesc.text = "${item[eventPosition].event.desc} "
-        AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki)
+        AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki - 1)
         binding.textPlayingYear.text = "H ${item[eventPosition].event.wareki} "
         eventPosition++
 

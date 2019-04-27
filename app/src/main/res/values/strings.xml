@@ -18,4 +18,5 @@
     <string name="msg_empty">再生するイベントがありません</string>
     <string name="msg_save">保存しました</string>
     <string name="year_start">平成元年</string>
+    <string name="arrow">▼</string>
 </resources>
