@@ -35,6 +35,10 @@
         </action>
 
     </fragment>
+    <fragment
+        android:id="@+id/stampFragment"
+        android:name="com.example.team.w.fragments.StampFragment"
+        android:label="StampFragment" />
 
 
 </navigation>
