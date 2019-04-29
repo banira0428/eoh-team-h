@@ -17,7 +17,6 @@ object FirebaseRepository {
 
     var uuid = ""
 
-
     fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,success: () -> Unit,failure: () -> Unit) {
 
         val db = FirebaseFirestore.getInstance()
@@ -42,7 +41,10 @@ object FirebaseRepository {
                 val ref = db.collection("events")
                     .document(it.id)
                 batch.delete(ref)
-                deleteImage(it.event.image_url)
+
+                if(it.event.image_url.isNotEmpty()){
+                    deleteImage(it.event.image_url)
+                }
             }
         }
 
@@ -54,7 +56,7 @@ object FirebaseRepository {
         }
     }
 
-    fun deleteImage(url: String) {
+    private fun deleteImage(url: String) {
         val storage: FirebaseStorage = FirebaseStorage.getInstance()
         println(url.substring(54))
         storage.reference.child(url.substring(54)).delete()

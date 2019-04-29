@@ -86,17 +86,21 @@ class PlayFragment : Fragment() {
 
             binding.layoutMenu.visibility = View.VISIBLE
             AnimationManager.appearAnimation(binding.layoutMenu){}
+            binding.textPlayingYear.text = getString(R.string.year_play, YEAR_MAX)
+            AnimationManager.arrowAnimation(binding.textArrow, YEAR_MAX)
             return
         }
 
         context?.also {
-            Glide.with(it).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+            if(viewModel.getImage(eventPosition).isNotEmpty()){
+                Glide.with(it).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+            }
         }
 
-        binding.playCardTitle.text = "${item[eventPosition].event.name} "
-        binding.playCardDesc.text = "${item[eventPosition].event.desc} "
+        binding.playCardTitle.text = item[eventPosition].event.name
+        binding.playCardDesc.text = item[eventPosition].event.desc
         AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki - 1)
-        binding.textPlayingYear.text = "H ${item[eventPosition].event.wareki} "
+        binding.textPlayingYear.text = getString(R.string.year_play,item[eventPosition].event.wareki)
         eventPosition++
 
         playingAnimation = AnimationManager.appearAnimation(binding.cardEvent, endListener = {
@@ -111,6 +115,10 @@ class PlayFragment : Fragment() {
         playingAnimation = AnimationManager.disappearAnimation(binding.cardEvent) {
             appear(item)
         }
+    }
+
+    companion object {
+        const val YEAR_MAX = 31
     }
 
 }

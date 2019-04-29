@@ -131,7 +131,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         }
 
         holder.binding.buttonDelete.setOnClickListener {
-            listener?.onClickDelete(position)
+            listener?.onClickDelete(holder.adapterPosition)
         }
 
         holder.binding.buttonClose.setOnClickListener {
@@ -140,8 +140,8 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
             holder.binding.layoutCardEdit.visibility = View.GONE
             holder.binding.layoutCardNormal.visibility = View.VISIBLE
+            documents[holder.adapterPosition].isEditing = false
             notifyDataSetChanged()
-            documents[position].isEditing = false
 
         }
 
@@ -190,6 +190,8 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         needDeleteDocuments.add(documents[position])
         documents.removeAt(position)
         notifyItemRemoved(position)
+
+        Log.d("keita","$position")
     }
 
     fun restoreEvent(position: Int) {
