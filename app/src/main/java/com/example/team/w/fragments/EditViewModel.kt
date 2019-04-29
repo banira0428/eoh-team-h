@@ -15,8 +15,8 @@ class EditViewModel : ViewModel() {
         return FirebaseRepository.getEvents()
     }
 
-    fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>,endListener: () -> Unit){
-        FirebaseRepository.saveEvents(events,deleteEvents,endListener)
+    fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>,endListener: () -> Unit,failureListener: () -> Unit){
+        FirebaseRepository.saveEvents(events,deleteEvents,endListener,failureListener)
     }
 
     fun uploadImage(bitmap: Bitmap,url: String,endListener: () -> Unit){

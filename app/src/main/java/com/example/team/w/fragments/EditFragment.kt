@@ -169,7 +169,7 @@ class EditFragment : Fragment() {
                         bar.show()
                     }
                 } else {
-                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments){}
+                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments,{},{})
                     findNavController().navigate(EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray()))
                 }
             }
@@ -182,6 +182,12 @@ class EditFragment : Fragment() {
                 viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
                     view?.also {
                         val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
+                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        bar.show()
+                    }
+                },failureListener = {
+                    view?.also {
+                        val bar = Snackbar.make(it, getString(R.string.msg_failure_save), Snackbar.LENGTH_SHORT)
                         bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
                         bar.show()
                     }

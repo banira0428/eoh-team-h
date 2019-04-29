@@ -23,7 +23,7 @@ object FirebaseRepository {
 
     var uuid = ""
 
-    fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,endListener: () -> Unit) {
+    fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,success: () -> Unit,failure: () -> Unit) {
 
         val db = FirebaseFirestore.getInstance()
         val batch: WriteBatch = db.batch()
@@ -50,9 +50,11 @@ object FirebaseRepository {
             }
         }
 
-        batch.commit().addOnCompleteListener {
+        batch.commit().addOnSuccessListener {
             loadEvents()
-            endListener()
+            success()
+        }.addOnFailureListener {
+            failure()
         }
     }
 

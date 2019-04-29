@@ -58,12 +58,12 @@ object AnimationManager {
             PropertyValuesHolder.ofFloat(
                 "scaleX",
                 1f,
-                0.25f
+                0.5f
             ),
             PropertyValuesHolder.ofFloat(
                 "scaleY",
                 1f,
-                0.25f
+                0.5f
             )
         )
 
@@ -89,12 +89,12 @@ object AnimationManager {
             ANIMATION_APPEAR,
             PropertyValuesHolder.ofFloat(
                 "scaleX",
-                0.25f,
+                0.5f,
                 1f
             ),
             PropertyValuesHolder.ofFloat(
                 "scaleY",
-                0.25f,
+                0.5f,
                 1f
             )
 
