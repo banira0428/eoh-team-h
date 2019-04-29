@@ -82,7 +82,6 @@
                     app:layout_constraintTop_toBottomOf="@id/play_card_title" />
 
 
-
             </android.support.constraint.ConstraintLayout>
 
 
