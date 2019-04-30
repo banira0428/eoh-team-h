@@ -100,7 +100,7 @@ class PlayFragment : Fragment() {
         binding.playCardTitle.text = item[eventPosition].event.name
         binding.playCardDesc.text = item[eventPosition].event.desc
         AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki - 1)
-        binding.textPlayingYear.text = getString(R.string.year_play,item[eventPosition].event.wareki)
+        binding.textPlayingYear.text = "${getString(R.string.year_play,item[eventPosition].event.wareki)} "
         eventPosition++
 
         playingAnimation = AnimationManager.appearAnimation(binding.cardEvent, endListener = {

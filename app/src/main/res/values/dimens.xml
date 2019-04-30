@@ -11,4 +11,6 @@
     <dimen name="view_height_normal">42dp</dimen>
 
     <dimen name="stamp_space">36dp</dimen>
+    <dimen name="stamp_space_small">24dp</dimen>
+
 </resources>

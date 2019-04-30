@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EohApplication</string>
+    <string name="app_name">平成史</string>
     <string name="save_event">保存</string>
     <string name="hint_event_name">イベント名</string>
     <string name="hint_event_desc">イベント詳細</string>
@@ -27,4 +27,5 @@
     <string name="msg_finish">31年間ありがとう！</string>
     <string name="img_url">https://storage.googleapis.com/eoh-team-w.appspot.com/%1$s</string>
     <string name="stamp">スタンプ</string>
+    <string name="stamp_text">あなたのリアクションを送ろう！</string>
 </resources>
