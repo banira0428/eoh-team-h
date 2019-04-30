@@ -189,7 +189,17 @@ object AnimationManager {
     fun resetAnimation(view: View,endListener: () -> Unit){
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
             view,
-            ANIMATION_APPEAR
+            ANIMATION_APPEAR,
+            PropertyValuesHolder.ofFloat(
+                "scaleX",
+                0.5f,
+                1f
+            ),
+            PropertyValuesHolder.ofFloat(
+                "scaleY",
+                0.5f,
+                1f
+            )
         )
 
         objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
@@ -199,7 +209,7 @@ object AnimationManager {
             }
         })
 
-        objectAnimator.duration = ANIMATION_LENGTH_MIDDLE
+        objectAnimator.duration = ANIMATION_LENGTH_LONG
 
         objectAnimator.start()
     }

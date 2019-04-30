@@ -2,6 +2,7 @@ package com.example.team.w.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.text.emoji.widget.EmojiAppCompatButton
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,26 +37,34 @@ class StampFragment : Fragment() {
 
 
         stamp_smile.setOnClickListener {
-            viewModel.send(stamp_smile.text.toString())
-
-            AnimationManager.sendAnimation(stamp_smile,endListener = {
-            })
+            send(stamp_smile)
         }
         stamp_thinking.setOnClickListener {
-            viewModel.send(stamp_thinking.text.toString())
+            send(stamp_thinking)
         }
         stamp_cry.setOnClickListener {
-            viewModel.send(stamp_cry.text.toString())
+            send(stamp_cry)
         }
         stamp_crap.setOnClickListener {
-            viewModel.send(stamp_crap.text.toString())
+            send(stamp_crap)
         }
         stamp_heart.setOnClickListener {
-            viewModel.send(stamp_heart.text.toString())
+            send(stamp_heart)
         }
         stamp_funny.setOnClickListener {
-            viewModel.send(stamp_funny.text.toString())
+            send(stamp_funny)
         }
     }
 
+    fun send(v: EmojiAppCompatButton) {
+
+        if (AnimationManager.animationJobs > 0) return
+
+        AnimationManager.sendAnimation(v, endListener = {
+            AnimationManager.resetAnimation(v, endListener = {})
+        })
+
+        viewModel.send(v.text.toString())
+
+    }
 }
