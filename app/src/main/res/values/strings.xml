@@ -19,10 +19,11 @@
     <string name="msg_save">保存しました</string>
     <string name="year_start">平成元年</string>
     <string name="arrow">▼</string>
-    <string name="msg_failure_save">保存に失敗しました</string>
+    <string name="msg_failure_save">端末がオフラインです</string>
     <string name="placeholder">%1$s</string>
     <string name="year_play">H %1$d</string>
     <string name="play_year_start">H1</string>
     <string name="play_year_end">H31</string>
     <string name="msg_finish">31年間ありがとう！</string>
+    <string name="img_url">https://storage.googleapis.com/eoh-team-w.appspot.com/%1$s</string>
 </resources>

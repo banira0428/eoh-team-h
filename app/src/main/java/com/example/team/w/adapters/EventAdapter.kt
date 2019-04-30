@@ -117,7 +117,14 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             listener?.onClickSetImage(holder.adapterPosition)
         }
 
-        if (document.event.image_url.isNotEmpty()) { //Firebaseから取得
+        if(document.image_uri != Uri.EMPTY){
+
+            holder.binding.imageEvent.setBackgroundColor(Color.BLACK)
+            holder.binding.imageEventPreview.setBackgroundColor(Color.BLACK)
+            holder.binding.imageEvent.setImageURI(document.image_uri)
+            holder.binding.imageEventPreview.setImageURI(document.image_uri)
+
+        }else if (document.event.image_url.isNotEmpty()) { //Firebaseから取得
 
             holder.binding.imageEvent.setImageWithGlide(context, document.event.image_url)
             holder.binding.imageEventPreview.setImageWithGlide(context, document.event.image_url)
@@ -181,17 +188,12 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         documents[position].event.image_url = url
     }
 
-    fun downloadImage(position: Int) {
-        notifyItemChanged(position, "")
-    }
-
     fun deleteEvent(position: Int) {
 
         needDeleteDocuments.add(documents[position])
         documents.removeAt(position)
         notifyItemRemoved(position)
 
-        Log.d("keita","$position")
     }
 
     fun restoreEvent(position: Int) {
@@ -199,6 +201,11 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
         documents.add(position, needDeleteDocuments.last())
         needDeleteDocuments.removeAt(needDeleteDocuments.size - 1)
         notifyItemInserted(position)
+    }
+
+    fun setImageURI(position: Int,uri: Uri) {
+        documents[position].image_uri = uri
+        notifyItemChanged(position)
     }
 
     class BindingHolder(var binding: CardEventBinding) : RecyclerView.ViewHolder(binding.root)

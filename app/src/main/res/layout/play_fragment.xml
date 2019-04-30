@@ -15,7 +15,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/extra_bold"
-                android:text="H 0"
                 android:textColor="@color/red"
                 android:textSize="56sp"
                 app:layout_constraintEnd_toEndOf="parent"

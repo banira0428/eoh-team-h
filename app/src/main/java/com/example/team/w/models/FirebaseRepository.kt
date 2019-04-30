@@ -3,12 +3,19 @@ package com.example.team.w.models
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.WriteBatch
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import java.util.*
+import android.net.NetworkInfo
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.support.v4.content.ContextCompat.getSystemService
+import android.net.ConnectivityManager
+
+
 
 
 object FirebaseRepository {
@@ -17,7 +24,7 @@ object FirebaseRepository {
 
     var uuid = ""
 
-    fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,success: () -> Unit,failure: () -> Unit) {
+    fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,success: () -> Unit) {
 
         val db = FirebaseFirestore.getInstance()
         val batch: WriteBatch = db.batch()
@@ -51,14 +58,11 @@ object FirebaseRepository {
         batch.commit().addOnSuccessListener {
             loadEvents()
             success()
-        }.addOnFailureListener {
-            failure()
         }
     }
 
     private fun deleteImage(url: String) {
         val storage: FirebaseStorage = FirebaseStorage.getInstance()
-        println(url.substring(54))
         storage.reference.child(url.substring(54)).delete()
     }
 
@@ -81,24 +85,16 @@ object FirebaseRepository {
     }
 
 
-    fun uploadImage(bitmap: Bitmap, url: String, endListener: () -> Unit) {
+    fun uploadImage(bitmap: Bitmap, url: String) {
         val storage = FirebaseStorage.getInstance()
 
-        // Create a storage reference from our app
         val storageRef = storage.reference.child(url)
 
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
 
-        val uploadTask = storageRef.putBytes(data)
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener {
-
-            endListener()
-
-        }
+        storageRef.putBytes(data)
     }
 
 }

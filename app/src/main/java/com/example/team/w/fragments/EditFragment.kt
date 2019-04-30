@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
@@ -132,16 +133,15 @@ class EditFragment : Fragment() {
         if (result == null) return
 
         val uri = result.data
+        adapter.setImageURI(requestCode,uri)
 
         try {
             val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
 
             val url = "${FirebaseRepository.uuid}/${System.currentTimeMillis()}"
-            adapter.setImageURL(requestCode,"https://storage.googleapis.com/eoh-team-w.appspot.com/$url")
+            adapter.setImageURL(requestCode,getString(R.string.img_url,url))
 
-            viewModel.uploadImage(bitmap, url, endListener = {
-                adapter.downloadImage(requestCode)
-            })
+            viewModel.uploadImage(bitmap, url)
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -169,29 +169,31 @@ class EditFragment : Fragment() {
                         bar.show()
                     }
                 } else {
-                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments,{},{})
+                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments,{})
                     findNavController().navigate(EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray()))
                 }
             }
             R.id.action_save -> {
 
-                item.isEnabled = false
-
-                binding.progress.visibility = View.VISIBLE
-                binding.listEvent.visibility = View.GONE
-                viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
-                    view?.also {
-                        val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
-                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
-                        bar.show()
-                    }
-                },failureListener = {
+                if(!isConnected()){
                     view?.also {
                         val bar = Snackbar.make(it, getString(R.string.msg_failure_save), Snackbar.LENGTH_SHORT)
                         bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
                         bar.show()
                     }
-                })
+                }else{
+                    item.isEnabled = false
+
+                    binding.progress.visibility = View.VISIBLE
+                    binding.listEvent.visibility = View.GONE
+                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
+                        view?.also {
+                            val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
+                            bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                            bar.show()
+                        }
+                    })
+                }
             }
 
         }
@@ -210,6 +212,13 @@ class EditFragment : Fragment() {
             bar.setActionTextColor(Color.WHITE)
             bar.show()
         }
+    }
+
+    private fun isConnected(): Boolean {
+        val cm = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork = cm.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting
     }
 
 }
