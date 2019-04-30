@@ -51,6 +51,16 @@ class EditFragment : Fragment() {
 
         adapter = EventAdapter(requireContext())
         adapter.setOnClickListener(object : EventAdapter.OnClickListener {
+            override fun onClickSave(position: Int) {
+
+                viewModel.saveEvent(adapter.documents[position],endListener = {
+                    view?.also {
+                        val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
+                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        bar.show()
+                    }
+                })
+            }
 
             override fun onClickSetImage(position: Int) {
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -61,6 +71,8 @@ class EditFragment : Fragment() {
             override fun onClickDelete(position: Int) {
                 deleteEvent(position)
             }
+
+
         })
 
         binding.listEvent.setHasFixedSize(true)
@@ -98,9 +110,9 @@ class EditFragment : Fragment() {
         viewModel.getEvents().observe(viewLifecycleOwner, Observer {
             it?.also {
 
-                binding.toolbar.menu.findItem(R.id.action_save)?.also {
-                    it.isEnabled = true
-                }
+//                binding.toolbar.menu.findItem(R.id.action_save)?.also {
+//                    it.isEnabled = true
+//                }
 
                 binding.progress.visibility = View.GONE
                 binding.listEvent.visibility = View.VISIBLE
@@ -169,32 +181,32 @@ class EditFragment : Fragment() {
                         bar.show()
                     }
                 } else {
-                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments,{})
+                    //viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments,{})
                     findNavController().navigate(EditFragmentDirections.actionEditToPlay(adapter.documents.toTypedArray()))
                 }
             }
-            R.id.action_save -> {
-
-                if(!isConnected()){
-                    view?.also {
-                        val bar = Snackbar.make(it, getString(R.string.msg_failure_save), Snackbar.LENGTH_SHORT)
-                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
-                        bar.show()
-                    }
-                }else{
-                    item.isEnabled = false
-
-                    binding.progress.visibility = View.VISIBLE
-                    binding.listEvent.visibility = View.GONE
-                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
-                        view?.also {
-                            val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
-                            bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
-                            bar.show()
-                        }
-                    })
-                }
-            }
+//            R.id.action_save -> {
+//
+//                if(!isConnected()){
+//                    view?.also {
+//                        val bar = Snackbar.make(it, getString(R.string.msg_failure_save), Snackbar.LENGTH_SHORT)
+//                        bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+//                        bar.show()
+//                    }
+//                }else{
+//                    item.isEnabled = false
+//
+//                    binding.progress.visibility = View.VISIBLE
+//                    binding.listEvent.visibility = View.GONE
+//                    viewModel.saveEvents(adapter.documents, adapter.needDeleteDocuments, endListener = {
+//                        view?.also {
+//                            val bar = Snackbar.make(it, getString(R.string.msg_save), Snackbar.LENGTH_SHORT)
+//                            bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+//                            bar.show()
+//                        }
+//                    })
+//                }
+//            }
             R.id.action_comment -> {
                 findNavController().navigate(EditFragmentDirections.actionEditToStamp())
             }
@@ -205,23 +217,22 @@ class EditFragment : Fragment() {
     }
 
     private fun deleteEvent(position: Int) {
+
+        val document = adapter.documents[position]
+
+        val backup = Document(document.id,document.isEditing,document.image_uri,document.event)
+
         adapter.deleteEvent(position)
+        viewModel.deleteEvent(adapter.needDeleteDocuments.last())
         view?.also {
             val bar = Snackbar.make(it, getString(R.string.msg_delete), Snackbar.LENGTH_LONG)
             bar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
             bar.setAction(getString(R.string.msg_restore)) {
-                adapter.restoreEvent(position)
+                adapter.restoreEvent(backup)
             }
             bar.setActionTextColor(Color.WHITE)
             bar.show()
         }
-    }
-
-    private fun isConnected(): Boolean {
-        val cm = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val activeNetwork = cm.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting
     }
 
 }

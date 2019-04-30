@@ -52,6 +52,7 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
     interface OnClickListener {
         fun onClickSetImage(position: Int)
         fun onClickDelete(position: Int)
+        fun onClickSave(position: Int)
     }
 
     fun setOnClickListener(listener: EventAdapter.OnClickListener) {
@@ -145,6 +146,8 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
             if (AnimationManager.animationJobs > 0) return@setOnClickListener
 
+            listener?.onClickSave(holder.adapterPosition)
+
             holder.binding.layoutCardEdit.visibility = View.GONE
             holder.binding.layoutCardNormal.visibility = View.VISIBLE
             documents[holder.adapterPosition].isEditing = false
@@ -158,10 +161,13 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
             if (AnimationManager.animationJobs > 0) return@setOnClickListener
             if (document.isEditing) return@setOnClickListener
 
+            documents.filter { it.isEditing }.forEach { it.isEditing = false }
 
             holder.binding.layoutCardEdit.visibility = View.VISIBLE
             holder.binding.layoutCardNormal.visibility = View.GONE
             documents[holder.adapterPosition].isEditing = true
+
+            notifyDataSetChanged()
 
         }
     }
@@ -196,11 +202,12 @@ class EventAdapter(private val context: Context) : RecyclerView.Adapter<EventAda
 
     }
 
-    fun restoreEvent(position: Int) {
+    fun restoreEvent(backup: Document) {
 
-        documents.add(position, needDeleteDocuments.last())
+        documents.add(backup)
+        documents = ArrayList(documents.sortedBy { it.event.wareki * -1 })
         needDeleteDocuments.removeAt(needDeleteDocuments.size - 1)
-        notifyItemInserted(position)
+        notifyDataSetChanged()
     }
 
     fun setImageURI(position: Int,uri: Uri) {

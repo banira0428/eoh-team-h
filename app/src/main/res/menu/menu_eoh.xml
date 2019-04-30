@@ -8,16 +8,15 @@
         android:title="@string/play_events"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_save"
-        android:icon="@drawable/ic_action_save"
-        android:title="@string/save_event"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_save"-->
+        <!--android:icon="@drawable/ic_action_save"-->
+        <!--android:title="@string/save_event"-->
+        <!--app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/action_comment"
-        android:icon="@drawable/ic_comment"
         android:title="@string/stamp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_credit"
         android:title="@string/credit"
