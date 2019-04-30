@@ -6,7 +6,7 @@ import com.example.team.w.models.Stamp
 
 class StampViewModel() : ViewModel() {
     fun send(unicode: String) {
-        val stamp = Stamp(unicode, true)
+        val stamp = Stamp(unicode, false)
         FirebaseRepository.sendStamp(stamp)
     }
 
