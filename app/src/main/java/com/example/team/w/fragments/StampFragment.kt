@@ -36,6 +36,8 @@ class StampFragment : Fragment() {
 
         stamp_smile.setOnClickListener {
             viewModel.send(stamp_smile.text.toString())
+
+            
         }
         stamp_thinking.setOnClickListener {
             viewModel.send(stamp_thinking.text.toString())

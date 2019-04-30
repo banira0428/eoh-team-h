@@ -154,4 +154,26 @@ object AnimationManager {
         objectAnimator.start()
 
     }
+
+    fun sendAnimation(view: View,endListener: () -> Unit){
+
+        val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            ANIMATION_DISAPPEAR
+        )
+
+        objectAnimator.addListener(object : MyAnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+
+                endListener()
+            }
+        })
+
+        objectAnimator.duration = ANIMATION_LENGTH_MIDDLE
+
+        objectAnimator.start()
+
+    }
+
 }
