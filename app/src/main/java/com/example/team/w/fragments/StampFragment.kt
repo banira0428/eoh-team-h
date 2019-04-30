@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.team.w.R
+import com.example.team.w.models.AnimationManager
 import kotlinx.android.synthetic.main.stamp_fragment.*
 
 class StampFragment : Fragment() {
@@ -37,7 +38,8 @@ class StampFragment : Fragment() {
         stamp_smile.setOnClickListener {
             viewModel.send(stamp_smile.text.toString())
 
-            
+            AnimationManager.sendAnimation(stamp_smile,endListener = {
+            })
         }
         stamp_thinking.setOnClickListener {
             viewModel.send(stamp_thinking.text.toString())
