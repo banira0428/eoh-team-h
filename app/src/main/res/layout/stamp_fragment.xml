@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/background">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_back"
+                app:popupTheme="@style/Theme.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:title="@string/stamp"
+                app:titleTextColor="#fff"/>
+
+        <android.support.constraint.ConstraintLayout
+                android:id="@+id/stamp_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_thinking"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="60dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_smile"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="60dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_cry"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toTopOf="@+id/stamp_thinking"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_crap"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toTopOf="@+id/stamp_cry"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_funny"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toTopOf="@+id/stamp_thinking"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.text.emoji.widget.EmojiAppCompatButton
+                    android:id="@+id/stamp_heart"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/stamp_ripple"
+                    android:fontFamily="@font/noto_color_emoji_compat"
+                    android:padding="0dp"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toTopOf="@+id/stamp_funny"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

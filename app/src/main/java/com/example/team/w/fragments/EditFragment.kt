@@ -195,6 +195,9 @@ class EditFragment : Fragment() {
                     })
                 }
             }
+            R.id.action_comment -> {
+                findNavController().navigate(EditFragmentDirections.actionEditToStamp())
+            }
 
         }
 

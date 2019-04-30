@@ -21,7 +21,6 @@ import android.net.ConnectivityManager
 object FirebaseRepository {
 
     private var events: MutableLiveData<List<DocumentSnapshot>>? = null
-
     var uuid = ""
 
     fun saveEvents(events: ArrayList<Document>, deleteEvents: ArrayList<Document>,success: () -> Unit) {
@@ -33,11 +32,11 @@ object FirebaseRepository {
 
             if (it.id.isEmpty()) { //新規追加
                 val ref = db.collection("events")
-                    .document()
+                        .document()
                 batch.set(ref, it.event)
             } else { //更新
                 val ref = db.collection("events")
-                    .document(it.id)
+                        .document(it.id)
                 batch.set(ref, it.event)
             }
         }
@@ -46,7 +45,7 @@ object FirebaseRepository {
 
             if (it.id.isNotEmpty()) { //削除
                 val ref = db.collection("events")
-                    .document(it.id)
+                        .document(it.id)
                 batch.delete(ref)
 
                 if(it.event.image_url.isNotEmpty()){
@@ -77,11 +76,20 @@ object FirebaseRepository {
     private fun loadEvents() {
         val db = FirebaseFirestore.getInstance()
         db.collection("events")
-            .whereEqualTo("device_id", uuid)
-            .get()
-            .addOnCompleteListener {
-                events?.postValue(it.result?.documents)
-            }
+                .whereEqualTo("device_id", uuid)
+                .get()
+                .addOnCompleteListener {
+                    events?.postValue(it.result?.documents)
+                }
+    }
+
+
+    fun sendStamp(stamp: Stamp) {
+        val db = FirebaseFirestore.getInstance()
+        val collection = db.collection("stamps")
+        collection.document().set(stamp).addOnCompleteListener {
+            println("stamp pon!")
+        }
     }
 
 

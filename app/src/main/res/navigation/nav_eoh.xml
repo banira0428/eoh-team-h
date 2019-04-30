@@ -17,6 +17,13 @@
                 app:destination="@id/playFragment">
         </action>
 
+        <action
+                android:id="@+id/action_edit_to_stamp"
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:destination="@id/stampFragment">
+        </action>
+
     </fragment>
 
     <fragment
@@ -35,6 +42,10 @@
         </action>
 
     </fragment>
+    <fragment
+        android:id="@+id/stampFragment"
+        android:name="com.example.team.w.fragments.StampFragment"
+        android:label="StampFragment" />
 
 
 </navigation>
