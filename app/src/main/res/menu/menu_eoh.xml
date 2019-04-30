@@ -16,7 +16,7 @@
     <item
         android:id="@+id/action_comment"
         android:icon="@drawable/ic_comment"
-        android:title="@string/comment"
+        android:title="@string/stamp"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_credit"
