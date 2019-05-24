@@ -1,38 +1,33 @@
 package com.example.team.w.fragments
 
+import android.animation.ObjectAnimator
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.team.w.R
 import com.example.team.w.databinding.PlayFragmentBinding
 import com.example.team.w.models.AnimationManager
-import com.example.team.w.models.Event
+import com.example.team.w.models.Document
+import kotlinx.android.synthetic.main.play_fragment.*
 
 class PlayFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = PlayFragment()
-        const val SHOW_EVENT_TIME: Long = 1000
-    }
 
     private lateinit var viewModel: PlayViewModel
 
     private lateinit var binding: PlayFragmentBinding
 
-    private lateinit var animationManager: AnimationManager
-
     private var eventPosition = 0
 
-    private var events: Array<Event> = arrayOf(
-        Event(name = "イベント1",wareki = 0), Event(name = "イベント2",wareki = 8), Event(name = "イベント3",wareki = 10), Event(name = "イベント4",wareki = 15)
-    )
+    private var playingAnimation: ObjectAnimator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,37 +38,87 @@ class PlayFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(PlayViewModel::class.java)
 
-        animationManager = AnimationManager()
-
         val size = Point()
         activity?.windowManager?.defaultDisplay?.getSize(size)
-        animationManager.screenwidth = size.x
+        AnimationManager.screenwidth = size.x
 
-        appear()
+        binding.buttonReplay.setOnClickListener {
+            findNavController().navigate(PlayFragmentDirections.actionReplay(viewModel.livedata.value?.toTypedArray() ?: emptyArray()))
+        }
+
+        binding.buttonEditEvent.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.buttonStop.setOnClickListener {
+            viewModel.livedata.postValue(null)
+            findNavController().popBackStack()
+        }
+
+        binding.buttonPause.setOnClickListener {
+
+            if(playingAnimation?.isPaused == true){
+                playingAnimation?.resume()
+                binding.buttonPause.setImageResource(R.drawable.ic_action_playback_pause)
+            }else{
+                playingAnimation?.pause()
+                binding.buttonPause.setImageResource(R.drawable.ic_action_playback_play)
+            }
+        }
 
         return binding.root
     }
 
-    private fun appear() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.livedata.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                appear(it)
+            }
+        })
+        AnimationManager.previousPosition = 0
+        text_arrow.translationX = 0f
+        viewModel.start(PlayFragmentArgs.fromBundle(arguments ?: return).documentList.toList())
+    }
 
-        if (eventPosition >= events.size) return
+    private fun appear(item: List<Document>) {
+        if (eventPosition >= viewModel.getDocumentsSize()) {
 
-        binding.textEvent.text = events[eventPosition].name
-        animationManager.arrowAnimation(binding.textArrow,events[eventPosition].wareki)
+            binding.layoutMenu.visibility = View.VISIBLE
+            AnimationManager.appearAnimation(binding.layoutMenu){}
+            binding.textPlayingYear.text = getString(R.string.year_play, YEAR_MAX)
+            AnimationManager.arrowAnimation(binding.textArrow, YEAR_MAX)
+            return
+        }
+
+        context?.also {
+            if(viewModel.getImage(eventPosition).isNotEmpty()){
+                Glide.with(it).load(viewModel.getImage(eventPosition)).into(binding.playCardImage)
+            }
+        }
+
+        binding.playCardTitle.text = item[eventPosition].event.name
+        binding.playCardDesc.text = item[eventPosition].event.desc
+        AnimationManager.arrowAnimation(binding.textArrow, item[eventPosition].event.wareki - 1)
+        binding.textPlayingYear.text = getString(R.string.year_play,item[eventPosition].event.wareki)
         eventPosition++
 
-        animationManager.appearAnimation(binding.cardEvent, endListener = {
+        playingAnimation = AnimationManager.appearAnimation(binding.cardEvent, endListener = {
 
-            Handler().postDelayed({
-                disappear()
-            }, SHOW_EVENT_TIME)
-
+            playingAnimation = AnimationManager.stayAnimation(binding.cardEvent){
+                disappear(item)
+            }
         })
     }
 
-    private fun disappear() {
-        animationManager.disappearAnimation(binding.cardEvent, endListener = {
-            appear()
-        })
+    private fun disappear(item: List<Document>) {
+        playingAnimation = AnimationManager.disappearAnimation(binding.cardEvent) {
+            appear(item)
+        }
     }
+
+    companion object {
+        const val YEAR_MAX = 31
+    }
+
 }

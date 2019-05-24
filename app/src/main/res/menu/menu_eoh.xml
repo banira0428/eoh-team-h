@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_play"
+        android:icon="@drawable/ic_action_playback_play"
+        android:title="@string/play_events"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_action_save"
+        android:title="@string/save_event"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_comment"
+        android:icon="@drawable/ic_comment"
+        android:title="@string/stamp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_credit"
+        android:title="@string/credit"
+        app:showAsAction="never" />
+
+
+</menu>

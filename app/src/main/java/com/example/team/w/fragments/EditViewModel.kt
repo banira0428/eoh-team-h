@@ -2,6 +2,8 @@ package com.example.team.w.fragments
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel;
+import android.graphics.Bitmap
+import android.net.ConnectivityManager
 import android.util.Log
 import com.example.team.w.models.Document
 import com.example.team.w.models.Event
@@ -14,8 +16,12 @@ class EditViewModel : ViewModel() {
         return FirebaseRepository.getEvents()
     }
 
-    fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>){
-        FirebaseRepository.saveEvents(events,deleteEvents)
+    fun saveEvents(events: ArrayList<Document>,deleteEvents: ArrayList<Document>,endListener: () -> Unit){
+        FirebaseRepository.saveEvents(events,deleteEvents,endListener)
+    }
+
+    fun uploadImage(bitmap: Bitmap,url: String){
+        FirebaseRepository.uploadImage(bitmap,url)
     }
 
 }

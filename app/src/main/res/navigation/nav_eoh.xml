@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:startDestination="@id/editFragment"
-            android:id="@+id/nav_eoh">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_eoh"
+            app:startDestination="@id/editFragment">
 
     <fragment
             android:id="@+id/editFragment"
@@ -11,25 +12,40 @@
 
         <action
                 android:id="@+id/action_edit_to_play"
-                app:destination="@id/playFragment"/>
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:destination="@id/playFragment">
+        </action>
 
         <action
-                android:id="@+id/action_edit_to_credit"
-                app:destination="@id/creditFragment"/>
+                android:id="@+id/action_edit_to_stamp"
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:destination="@id/stampFragment">
+        </action>
 
-    </fragment>
-
-    <fragment
-            android:id="@+id/creditFragment"
-            android:name="com.example.team.w.fragments.CreditFragment"
-            tools:layout="@layout/credit_fragment">
     </fragment>
 
     <fragment
             android:id="@+id/playFragment"
             android:name="com.example.team.w.fragments.PlayFragment"
             tools:layout="@layout/play_fragment">
+        <argument android:name="documentList" app:argType="com.example.team.w.models.Document[]"/>
+
+        <action
+                android:id="@+id/action_replay"
+                app:enterAnim="@anim/my_nav_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:destination="@id/playFragment"
+                app:popUpTo="@id/editFragment"
+                app:popUpToInclusive="false">
+        </action>
+
     </fragment>
+    <fragment
+        android:id="@+id/stampFragment"
+        android:name="com.example.team.w.fragments.StampFragment"
+        android:label="StampFragment" />
 
 
 </navigation>
